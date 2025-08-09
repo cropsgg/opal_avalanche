@@ -301,12 +301,13 @@ class HealthChecker:
     async def check_qdrant_health(self) -> Dict[str, Any]:
         """Check Qdrant vector database health"""
         try:
-            from app.retrieval.qdrant_client import client
+            from app.retrieval.qdrant_client import get_qdrant
             
             start_time = time.time()
             
             # Check collection status
-            collections = client.get_collections()
+            qdrant_client = get_qdrant()
+            collections = qdrant_client.get_collections()
             
             response_time = time.time() - start_time
             
@@ -333,7 +334,7 @@ class HealthChecker:
             start_time = time.time()
             
             redis_client = get_redis()
-            await redis_client.ping()
+            redis_client.ping()
             
             response_time = time.time() - start_time
             

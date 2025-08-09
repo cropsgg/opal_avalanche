@@ -70,14 +70,24 @@ async def get_usage_metrics(
         period_start = datetime.utcnow() - timedelta(days=days)
         period_end = datetime.utcnow()
         
-        # Main usage metrics query
+        # Main usage metrics query (PostgreSQL-compatible, without MODE())
         usage_sql = """
             WITH query_stats AS (
                 SELECT 
                     COUNT(*) as total_queries,
                     AVG(CASE WHEN r.confidence IS NOT NULL THEN r.confidence ELSE 0 END) as avg_confidence,
                     COUNT(CASE WHEN r.confidence >= 0.7 THEN 1 END) as successful_queries,
-                    MODE() WITHIN GROUP (ORDER BY q.mode) as most_used_mode
+                    (
+                        SELECT q2.mode
+                        FROM queries q2
+                        JOIN matters m2 ON q2.matter_id = m2.id
+                        WHERE m2.user_id = :user_id 
+                          AND q2.created_at >= :period_start
+                          AND q2.created_at <= :period_end
+                        GROUP BY q2.mode
+                        ORDER BY COUNT(*) DESC
+                        LIMIT 1
+                    ) as most_used_mode
                 FROM queries q
                 JOIN matters m ON q.matter_id = m.id
                 LEFT JOIN runs r ON r.query_id = q.id
@@ -98,7 +108,7 @@ async def get_usage_metrics(
                 qs.total_queries,
                 qs.avg_confidence,
                 qs.successful_queries,
-                qs.most_used_mode,
+                COALESCE(qs.most_used_mode, 'general') as most_used_mode,
                 bs.total_credits_spent,
                 bs.billable_queries
             FROM query_stats qs

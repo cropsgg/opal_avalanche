@@ -8,6 +8,7 @@ from typing import Dict, Any, List
 from app.core.tasks import get_celery
 from app.db.session import get_db
 from app.db import crud
+import uuid
 from app.storage.supabase_client import download_bytes
 from app.ingestion.ocr import has_text_layer, ocr_pdf_pages
 from app.ingestion.parse_pdf import extract_text_with_paras as parse_pdf_paras, has_text_layer as pdf_has_text
@@ -44,7 +45,11 @@ async def _ingest_document_async(doc_id: str) -> str:
     async for db in get_db():
         try:
             # 1. Fetch document metadata
-            doc = await crud.get_document(db, doc_id)
+            try:
+                doc_uuid = uuid.UUID(doc_id)
+            except Exception:
+                raise ValueError(f"Invalid document id: {doc_id}")
+            doc = await crud.get_document(db, doc_uuid)
             if not doc:
                 raise ValueError(f"Document {doc_id} not found")
             

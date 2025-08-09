@@ -15,7 +15,7 @@ celery==5.3.6
 qdrant-client>=1.15.1,<2
 openai==1.37.0
 tiktoken==0.7.0
-httpx==0.27.0
+httpx>=0.24.0,<0.26.0
 
 structlog==24.1.0
 opentelemetry-sdk==1.25.0
@@ -37,7 +37,7 @@ reportlab==4.2.0
 pdfminer.six==20231228
 pypdf==4.2.0
 pytesseract==0.3.10
-Pillow==10.3.0
+Pillow>=10.4.0
 
 pytest==8.2.0
 

@@ -245,7 +245,7 @@ async def get_usage_summary(db: AsyncSession, user_id: str, days: int = 30) -> D
             SUM(CASE WHEN cost_usd IS NOT NULL THEN cost_usd ELSE 0 END) as total_cost_usd
         FROM billing_ledger 
         WHERE user_id = :user_id 
-        AND created_at >= NOW() - INTERVAL ':days days'
+        AND created_at >= NOW() - (:days || ' days')::interval
     """)
     
     result = (await db.execute(sql, {"user_id": user_id, "days": days})).first()

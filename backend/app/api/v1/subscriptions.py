@@ -368,7 +368,7 @@ async def get_usage_analytics(
                 SUM(CASE WHEN credits_delta < 0 THEN ABS(credits_delta) ELSE 0 END) as credits_spent
             FROM billing_ledger 
             WHERE user_id = :user_id 
-            AND created_at >= NOW() - INTERVAL ':days days'
+            AND created_at >= NOW() - (:days || ' days')::interval
             GROUP BY DATE(created_at)
             ORDER BY date DESC
             LIMIT 100

@@ -3,6 +3,7 @@ from __future__ import annotations
 import base64
 import os
 from typing import Dict, Optional, Any
+import time
 import structlog
 import json
 
@@ -142,7 +143,7 @@ class EnvelopeEncryption:
                 random_key = base64.b64encode(os.urandom(32)).decode()
                 encrypted_package["encrypted_key"] = random_key
                 encrypted_package["shredded"] = True
-                encrypted_package["shredded_at"] = str(int(os.time.time()))
+                encrypted_package["shredded_at"] = str(int(time.time()))
                 
                 log.info("encryption.crypto_shred_success")
                 return True
