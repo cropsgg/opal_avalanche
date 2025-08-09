@@ -1,11 +1,12 @@
 from functools import lru_cache
+from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field
 
 
 class Settings(BaseSettings):
     # Postgres / Supabase
-    DATABASE_URL: str = Field(..., description="SQLAlchemy URL, e.g. postgresql+psycopg://user:pass@host:6543/postgres")
+    DATABASE_URL: str = Field("sqlite:///test.db", description="SQLAlchemy URL, e.g. postgresql+psycopg://user:pass@host:6543/postgres")
     SUPABASE_URL: str | None = None
     SUPABASE_STORAGE_URL: str | None = None
     SUPABASE_SERVICE_KEY: str | None = None
@@ -24,6 +25,13 @@ class Settings(BaseSettings):
     OPENAI_EMBED_MODEL: str = "text-embedding-3-large"
     OPENAI_GEN_MODEL: str = "gpt-4o-mini"
     OPENAI_VERIFY_MODEL: str = "gpt-4o"
+    
+    # Additional Qdrant settings
+    COLLECTION_NAME: str = "opal_chunks"
+    EMBEDDING_MODEL: str = "all-mpnet-base-v2"
+    TOP_K: int = 24
+    FINAL_K: int = 12
+    BATCH_SIZE: int = 64
 
     # Clerk
     CLERK_JWKS_URL: str | None = None
@@ -40,11 +48,15 @@ class Settings(BaseSettings):
 
     # Exports
     EXPORT_TMP_DIR: str = "/tmp/opal"
+    
+    # Storage paths
+    STORAGE_PATH: str = "./storage"
+    RUNS_PATH: str = "./runs"
 
     # Observability
     OTEL_EXPORTER_OTLP_ENDPOINT: str | None = None
 
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    model_config = SettingsConfigDict(env_file="../.env", extra="ignore")
 
 
 @lru_cache(maxsize=1)
