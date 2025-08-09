@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg*
+*.log
+.dist/
+build/
+dist/
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+
+# Virtual envs
+.venv/
+venv/
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# Node/JS (contracts if hardhat)
+node_modules/
+*.tsbuildinfo
+
+# OS
+.DS_Store
+
+# Docker
+**/docker-volume/**
+
+# Alembic
+backend/app/db/migrations/versions/*.pyc
+
+# Local data
+/tmp/
+**/*.tmp
+
+# Supabase exports or local files
+exports/
