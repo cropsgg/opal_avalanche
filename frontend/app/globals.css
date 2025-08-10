@@ -8,7 +8,9 @@
   font-family: neu;
   src: url('/sundown-assets/fonts/NeueHaasDisplayMediu.ttf');
 }
-
+.cl-footer{
+  display: none !important;
+}
 @font-face {
   font-family: neu;
   font-weight: 100;
