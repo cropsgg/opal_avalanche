@@ -26,6 +26,13 @@ venv/
 node_modules/
 *.tsbuildinfo
 
+# Next.js
+.next/
+out/
+.vercel/
+*.tsbuildinfo
+.env*.local
+
 # OS
 .DS_Store
 
@@ -38,6 +45,12 @@ backend/app/db/migrations/versions/*.pyc
 # Local data
 /tmp/
 **/*.tmp
+
+# Large files that shouldn't be tracked
+*.zip
+*.tar.gz
+*.dmg
+*.pkg
 
 # Supabase exports or local files
 exports/
