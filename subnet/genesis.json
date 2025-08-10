@@ -1,0 +1,64 @@
+{
+  "config": {
+    "chainId": 43210,
+    "homesteadBlock": 0,
+    "eip150Block": 0,
+    "eip150Hash": "0x2086799aeebeae135c246c65021c82b4e15a2c451340993aacfd2751886514f0",
+    "eip155Block": 0,
+    "eip158Block": 0,
+    "byzantiumBlock": 0,
+    "constantinopleBlock": 0,
+    "petersburgBlock": 0,
+    "istanbulBlock": 0,
+    "muirGlacierBlock": 0,
+    "subnetEVMTimestamp": 0,
+    "contractDeployerAllowListConfig": {
+      "blockTimestamp": 0,
+      "adminAddresses": [
+        "0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC"
+      ],
+      "enabledAddresses": [
+        "0x0Fa8EA536Be85F32724D57A37758761B86416123"
+      ]
+    },
+    "txAllowListConfig": {
+      "blockTimestamp": 0,
+      "adminAddresses": [
+        "0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC"
+      ],
+      "enabledAddresses": [
+        "0x9A9f2CCfdE556A7E9Ff0848998Aa4a0CFD8863AE"
+      ]
+    },
+    "feeManagerConfig": {
+      "blockTimestamp": 0,
+      "minBaseFee": "0x1312D00",
+      "targetGas": 15000000,
+      "baseFeeChangeDenominator": 8,
+      "minBlockGasCost": "0x0",
+      "maxBlockGasCost": "0x1BC16D674EC80000",
+      "targetBlockRate": 2
+    }
+  },
+  "alloc": {
+    "0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC": {
+      "balance": "0x8AC7230489E80000"
+    },
+    "0x9A9f2CCfdE556A7E9Ff0848998Aa4a0CFD8863AE": {
+      "balance": "0x8AC7230489E80000"
+    },
+    "0x0Fa8EA536Be85F32724D57A37758761B86416123": {
+      "balance": "0x8AC7230489E80000"
+    }
+  },
+  "nonce": "0x0",
+  "timestamp": "0x0",
+  "extraData": "0x00",
+  "gasLimit": "0x1C9C380",
+  "difficulty": "0x0",
+  "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+  "coinbase": "0x0000000000000000000000000000000000000000",
+  "number": "0x0",
+  "gasUsed": "0x0",
+  "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000"
+}

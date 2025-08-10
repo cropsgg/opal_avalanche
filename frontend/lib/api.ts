@@ -219,26 +219,48 @@ class ApiClient {
     });
   }
 
-  // Notarization API
-  async notarizeRun(runId: string) {
+  // Notarization API - Phase 2 Subnet
+  async notarizeRun(runId: string, usePrivateSubnet: boolean = true) {
+    const endpoint = usePrivateSubnet 
+      ? `/v1/subnet/runs/${runId}/notarize`
+      : `/v1/runs/${runId}/notarize`;
+      
     return this.request<{
       tx_hash: string;
       block_number: number;
       merkle_root: string;
-    }>(`/v1/runs/${runId}/notarize`, {
+      network: string;
+      network_id: number;
+      contract_address?: string;
+      gas_used?: number;
+      confirmation_count?: number;
+      is_private_subnet?: boolean;
+    }>(endpoint, {
       method: 'POST',
+      body: JSON.stringify({
+        include_audit_commit: true
+      }),
     });
   }
 
-  async getNotarization(runId: string) {
+  async getNotarization(runId: string, usePrivateSubnet: boolean = true) {
+    const endpoint = usePrivateSubnet 
+      ? `/v1/subnet/notary/${runId}`
+      : `/v1/notary/${runId}`;
+      
     return this.request<{
       run_id: string;
       merkle_root: string;
       tx_hash: string;
       network: string;
+      network_id: number;
       block_number: number;
+      contract_address?: string;
+      gas_used?: number;
+      confirmation_count?: number;
       created_at: string;
-    }>(`/v1/notary/${runId}`);
+      is_private_subnet?: boolean;
+    }>(endpoint);
   }
 
   // User API

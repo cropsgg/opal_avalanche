@@ -41,10 +41,22 @@ class Settings(BaseSettings):
     # KMS / Encryption
     APP_KMS_KEY_BASE64: str | None = None
 
-    # Avalanche Fuji
+    # Avalanche Fuji (Legacy)
     AVALANCHE_RPC: str | None = None
     NOTARY_CONTRACT_ADDRESS: str | None = None
     PUBLISHER_PRIVATE_KEY: str | None = None
+
+    # Private Avalanche Subnet (Phase 2)
+    SUBNET_RPC: str | None = None
+    SUBNET_CHAIN_ID: int = 43210
+    SUBNET_NOTARY_ADDR: str | None = None
+    SUBNET_COMMIT_ADDR: str | None = None
+    SUBNET_REGISTRY_ADDR: str | None = None
+    SUBNET_SENDER_PK: str | None = None
+    
+    # Subnet Encryption
+    SUBNET_MASTER_KEY_B64: str | None = None
+    FHE_SALT_OR_LABEL_SALT_BASE64: str | None = None
 
     # Exports
     EXPORT_TMP_DIR: str = "/tmp/opal"

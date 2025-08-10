@@ -1,0 +1,53 @@
+# OPAL Backend Configuration
+
+# Database
+DATABASE_URL=postgresql://opal:opal123@localhost:5432/opal_db
+ASYNC_DATABASE_URL=postgresql+asyncpg://opal:opal123@localhost:5432/opal_db
+
+# Vector Database
+QDRANT_URL=http://localhost:6333
+QDRANT_COLLECTION=opal_chunks
+
+# OpenAI
+OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_EMBED_MODEL=text-embedding-3-large
+OPENAI_GEN_MODEL=gpt-4o-mini
+OPENAI_VERIFY_MODEL=gpt-4o
+
+# Authentication
+CLERK_SECRET_KEY=your_clerk_secret_key_here
+CLERK_JWKS_URL=https://your-clerk-instance.clerk.accounts.dev/.well-known/jwks.json
+CLERK_ISSUER=https://your-clerk-instance.clerk.accounts.dev
+CLERK_AUDIENCE=your-clerk-audience
+
+# Storage
+SUPABASE_URL=your_supabase_url_here
+SUPABASE_STORAGE_URL=your_supabase_storage_url_here
+SUPABASE_SERVICE_KEY=your_supabase_service_key_here
+
+# Legacy Avalanche Fuji (Phase 1)
+AVALANCHE_RPC=https://api.avax-test.network/ext/bc/C/rpc
+NOTARY_CONTRACT_ADDRESS=0x...
+PUBLISHER_PRIVATE_KEY=0x...
+
+# OPAL Phase 2 - Private Subnet
+SUBNET_RPC=http://localhost:9650/ext/bc/opal/rpc
+SUBNET_CHAIN_ID=43210
+SUBNET_NOTARY_ADDR=0x...
+SUBNET_COMMIT_ADDR=0x...
+SUBNET_REGISTRY_ADDR=0x...
+SUBNET_SENDER_PK=0x...
+
+# Subnet Encryption Keys
+# Generate with: openssl rand -base64 32
+SUBNET_MASTER_KEY_B64=your_32_byte_master_key_base64_encoded
+# Generate with: openssl rand -base64 16  
+FHE_SALT_OR_LABEL_SALT_BASE64=your_16_byte_salt_base64_encoded
+
+# Development Settings
+SECRET_KEY=your-secret-key-for-app-encryption
+ENVIRONMENT=development
+DEBUG=true
+
+# Observability (Optional)
+OTEL_EXPORTER_OTLP_ENDPOINT=your_otel_endpoint

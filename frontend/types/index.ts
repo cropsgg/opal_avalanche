@@ -124,8 +124,13 @@ export interface NotarizationProof {
   merkle_root: string;
   tx_hash: string;
   network: string;
+  network_id: number;
   block_number: number;
+  contract_address?: string;
+  gas_used?: number;
+  confirmation_count?: number;
   created_at: string;
+  is_private_subnet?: boolean;
 }
 
 export interface ExportOptions {

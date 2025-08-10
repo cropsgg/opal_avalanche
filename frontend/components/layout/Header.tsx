@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { NetworkStatus } from '@/components/ui/network-status';
 import { Scale, User } from 'lucide-react';
 import { SignInButton, SignUpButton, UserButton, useUser } from '@clerk/nextjs';
 
@@ -26,6 +27,7 @@ export function Header() {
           <div className="flex items-center space-x-4">
             {isSignedIn ? (
               <>
+                <NetworkStatus />
                 <Link href="/dashboard">
                   <Button
                     variant="ghost"
