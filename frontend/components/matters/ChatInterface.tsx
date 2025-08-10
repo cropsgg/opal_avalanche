@@ -66,10 +66,8 @@ export function ChatInterface({ matterId, disabled, onEvidenceSelect, onRunCompl
 
     try {
       const response = await apiClient.sendChatMessage({
-        matterId,
-        message: currentInput,
-        mode,
-        filters: {} // TODO: Add filter support
+        matter_id: matterId,
+        message: currentInput
       });
 
       if (response.error) {
@@ -91,7 +89,7 @@ export function ChatInterface({ matterId, disabled, onEvidenceSelect, onRunCompl
           type: 'assistant',
           content: response.data.answer,
           timestamp: new Date().toISOString(),
-          evidence: response.data.citations.map(citation => ({
+          evidence: response.data.citations?.map(citation => ({
             case: citation.title || citation.cite || 'Legal Authority',
             citation: citation.cite,
             relevance: 'High' as const, // TODO: Determine relevance from confidence
@@ -99,7 +97,7 @@ export function ChatInterface({ matterId, disabled, onEvidenceSelect, onRunCompl
             authority_id: citation.authority_id.toString(),
             court: citation.court,
             snippet: '' // TODO: Add snippet extraction
-          })),
+          })) || [],
           run_id: response.data.run_id,
           confidence: response.data.confidence
         };

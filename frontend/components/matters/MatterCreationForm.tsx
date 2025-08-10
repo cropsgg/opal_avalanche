@@ -65,8 +65,7 @@ export function MatterCreationForm() {
     try {
       // Create matter first
       const matterResponse = await apiClient.createMatter({
-        title: formData.title,
-        language: formData.language
+        title: formData.title
       });
 
       if (matterResponse.error) {
@@ -79,7 +78,7 @@ export function MatterCreationForm() {
         return;
       }
 
-      const matterId = matterResponse.data?.id;
+      const matterId = matterResponse.data ? ('matter_id' in matterResponse.data ? matterResponse.data.matter_id : matterResponse.data.id) : null;
       if (!matterId) {
         setError('Failed to create matter');
         return;

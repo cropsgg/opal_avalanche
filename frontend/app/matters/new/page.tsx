@@ -46,8 +46,7 @@ export default function NewMatterPage() {
 
     try {
       const response = await apiClient.createMatter({
-        title: formData.title.trim(),
-        language: formData.language
+        title: formData.title.trim()
       });
 
       if (response.error) {
@@ -64,7 +63,8 @@ export default function NewMatterPage() {
           title: 'Success',
           description: 'Matter created successfully',
         });
-        router.push(`/matters/${response.data.id}`);
+        const id = 'matter_id' in response.data ? response.data.matter_id : response.data.id;
+        router.push(`/matters/${id}`);
       }
     } catch (error) {
       console.error('Failed to create matter:', error);

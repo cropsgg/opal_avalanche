@@ -1,0 +1,21 @@
+{
+  "name": "opal-subnet-contracts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "commonjs",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^6.1.0",
+    "@openzeppelin/contracts": "^5.0.0",
+    "dotenv": "^17.2.1",
+    "hardhat": "^2.26.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  },
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:local": "hardhat run scripts/deploy.ts --network local",
+    "deploy:subnet": "hardhat run scripts/deploy.ts --network subnet",
+    "verify:subnet": "hardhat run scripts/verify.ts --network subnet"
+  }
+}

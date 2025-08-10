@@ -1,0 +1,735 @@
+{
+  "network": "hardhat",
+  "chainId": "43210",
+  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "timestamp": "2025-08-09T23:26:15.551Z",
+  "contracts": {
+    "Notary": {
+      "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "abi": [
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "runId",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "rootHash",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "submitter",
+              "type": "address",
+              "baseType": "address",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "ts",
+              "type": "uint256",
+              "baseType": "uint256",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "Notarized",
+          "anonymous": false
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "runId",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "get",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "runId",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "isNotarized",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "bool",
+              "baseType": "bool",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "runId",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "rootHash",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "publish",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "roots",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        }
+      ]
+    },
+    "CommitStore": {
+      "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "abi": [
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "id",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "labelHash",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "dataHash",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "ts",
+              "type": "uint256",
+              "baseType": "uint256",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "Committed",
+          "anonymous": false
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "id",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "labelHash",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "ciphertext",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "dataHash",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "commit",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "dataHashes",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "id",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "exists",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "bool",
+              "baseType": "bool",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "id",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "get",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "id",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "getMetadata",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "labelHash",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "dataHash",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "labelHashes",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        }
+      ]
+    },
+    "ProjectRegistry": {
+      "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      "abi": [
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "versionId",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "sourceHash",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "artifactHash",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "ts",
+              "type": "uint256",
+              "baseType": "uint256",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "version",
+              "type": "string",
+              "baseType": "string",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "Release",
+          "anonymous": false
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "versionId",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "getRelease",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "info",
+              "type": "tuple",
+              "baseType": "tuple",
+              "components": [
+                {
+                  "name": "sourceHash",
+                  "type": "bytes32",
+                  "baseType": "bytes32",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "artifactHash",
+                  "type": "bytes32",
+                  "baseType": "bytes32",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "timestamp",
+                  "type": "uint256",
+                  "baseType": "uint256",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "version",
+                  "type": "string",
+                  "baseType": "string",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "exists",
+                  "type": "bool",
+                  "baseType": "bool",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                }
+              ],
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "versionId",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "isReleased",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "bool",
+              "baseType": "bool",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "versionId",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "sourceHash",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "artifactHash",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "version",
+              "type": "string",
+              "baseType": "string",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "register",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "released",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "bool",
+              "baseType": "bool",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "releases",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "sourceHash",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "artifactHash",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "timestamp",
+              "type": "uint256",
+              "baseType": "uint256",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "version",
+              "type": "string",
+              "baseType": "string",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "exists",
+              "type": "bool",
+              "baseType": "bool",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "versionId",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "expectedSourceHash",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "expectedArtifactHash",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "verify",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "bool",
+              "baseType": "bool",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        }
+      ]
+    }
+  }
+}

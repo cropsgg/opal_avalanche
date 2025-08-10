@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://648cd54b91d1.ngrok-free.app';
 
 interface ApiResponse<T> {
   data?: T;
@@ -23,6 +23,7 @@ class ApiClient {
           const token = await clerk.session.getToken();
           return {
             'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true',
             ...(token && { 'Authorization': `Bearer ${token}` }),
           };
         }
@@ -30,11 +31,13 @@ class ApiClient {
 
       return {
         'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': 'true',
       };
     } catch (error) {
       console.warn('Failed to get auth token:', error);
       return {
         'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': 'true',
       };
     }
   }
@@ -79,54 +82,84 @@ class ApiClient {
 
   // Health check
   async health() {
-    return this.request<{ ok: boolean }>('/health');
+    return this.request<{ status: string }>('/');
   }
 
-  // Matters API
-  async createMatter(data: { title: string; language?: string }) {
-    return this.request<{ id: string; title: string }>('/v1/matters', {
+  // FastAPI Endpoints - New Backend Integration
+  
+  // Get case types
+  async getCaseTypes() {
+    return this.request<string[]>('/case-types');
+  }
+
+  // Get jurisdictions
+  async getJurisdictions() {
+    return this.request<string[]>('/jurisdictions');
+  }
+
+  // Matters API - Updated for FastAPI
+  async createMatter(data: { title: string }) {
+    const formData = new FormData();
+    formData.append('title', data.title);
+    
+    const response = await this.request<{ matter_id: string; title: string }>('/matters', {
       method: 'POST',
-      body: JSON.stringify(data),
+      headers: {
+        'ngrok-skip-browser-warning': 'true',
+      },
+      body: formData,
     });
+
+    // Transform response to match expected format
+    if (response.data && response.data.matter_id) {
+      return {
+        ...response,
+        data: {
+          id: response.data.matter_id,
+          title: response.data.title
+        }
+      };
+    }
+
+    return response;
   }
 
+  // Legacy methods - FastAPI doesn't implement these yet
   async getMatters() {
-    return this.request<Array<{
-      id: string;
-      user_id: string;
-      title: string;
-      language: 'en' | 'hi';
-      created_at: string;
-      documents_count?: number;
-      last_analysis?: string;
-      status?: 'active' | 'archived' | 'draft';
-    }>>('/v1/matters');
+    // For now, return empty array since FastAPI doesn't have this endpoint
+    return { data: [], status: 200 };
   }
 
   async getMatter(id: string) {
-    return this.request<{
-      id: string;
-      user_id: string;
-      title: string;
-      language: 'en' | 'hi';
-      created_at: string;
-      documents_count?: number;
-      last_analysis?: string;
-      status?: 'active' | 'archived' | 'draft';
-    }>(`/v1/matters/${id}`);
+    // For now, return a mock matter since FastAPI doesn't have this endpoint
+    return {
+      data: {
+        id,
+        user_id: 'current-user',
+        title: `Matter ${id}`,
+        language: 'en' as const,
+        created_at: new Date().toISOString(),
+        documents_count: 0,
+        last_analysis: undefined,
+        status: 'active' as const
+      },
+      status: 200
+    };
   }
 
-  // Documents API
-  async uploadDocument(matterId: string, file: File) {
+  // Documents API - Updated for FastAPI
+  async uploadDocument(matterId: string, file: File, court?: string, caseNumber?: string) {
     try {
       const headers = await this.getAuthHeaders();
       const formData = new FormData();
       formData.append('file', file);
+      if (court) formData.append('court', court);
+      if (caseNumber) formData.append('case_number', caseNumber);
 
-      const response = await fetch(`${this.baseURL}/v1/matters/${matterId}/documents`, {
+      const response = await fetch(`${this.baseURL}/matters/${matterId}/documents`, {
         method: 'POST',
         headers: {
-          // Remove Content-Type to let browser set it with boundary for FormData
+          'ngrok-skip-browser-warning': 'true',
           ...((headers as any).Authorization && { 'Authorization': (headers as any).Authorization }),
         },
         body: formData,
@@ -154,28 +187,29 @@ class ApiClient {
     }
   }
 
-  async getDocuments(matterId: string) {
-    return this.request<Array<{
-      id: string;
-      matter_id: string;
-      storage_path: string;
-      filetype: string;
-      size: number;
-      ocr_status: string;
-      created_at: string;
-    }>>(`/v1/matters/${matterId}/documents`);
+  async getDocuments(matterId: string): Promise<ApiResponse<any[]>> {
+    // For now, return empty array since FastAPI doesn't have this endpoint
+    return { data: [], status: 200 };
   }
 
-  // Chat API
+  // Chat API - Updated for FastAPI
   async sendChatMessage(data: {
-    matterId: string;
+    matter_id: string;
     message: string;
-    mode: 'general' | 'precedent' | 'limitation' | 'draft';
-    filters?: Record<string, any>;
+    facts?: string;
+    case_type?: string;
+    jurisdiction_region?: string;
   }) {
+    const formData = new FormData();
+    formData.append('matter_id', data.matter_id);
+    formData.append('message', data.message);
+    if (data.facts) formData.append('facts', data.facts);
+    if (data.case_type) formData.append('case_type', data.case_type);
+    if (data.jurisdiction_region) formData.append('jurisdiction_region', data.jurisdiction_region);
+
     return this.request<{
       answer: string;
-      citations: Array<{
+      citations?: Array<{
         authority_id: string;
         court: string;
         cite: string;
@@ -187,13 +221,49 @@ class ApiClient {
       evidence_merkle_root?: string;
       run_id: string;
       confidence?: number;
-    }>('/v1/chat', {
+    }>('/chat', {
       method: 'POST',
-      body: JSON.stringify(data),
+      headers: {
+        'ngrok-skip-browser-warning': 'true',
+      },
+      body: formData,
     });
   }
 
-  // Runs API
+  // Chat Follow-up API
+  async sendChatFollowup(data: {
+    matter_id: string;
+    run_id: string;
+    message: string;
+  }) {
+    const formData = new FormData();
+    formData.append('matter_id', data.matter_id);
+    formData.append('run_id', data.run_id);
+    formData.append('message', data.message);
+
+    return this.request<{
+      answer: string;
+      citations?: Array<{
+        authority_id: string;
+        court: string;
+        cite: string;
+        para_ids: number[];
+        title?: string;
+        neutral_cite?: string;
+        reporter_cite?: string;
+      }>;
+      run_id: string;
+      confidence?: number;
+    }>('/chat-followup', {
+      method: 'POST',
+      headers: {
+        'ngrok-skip-browser-warning': 'true',
+      },
+      body: formData,
+    });
+  }
+
+  // Runs API - Updated for FastAPI
   async getRun(runId: string) {
     return this.request<{
       id: string;
@@ -208,15 +278,57 @@ class ApiClient {
         confidence: number;
         aligned: boolean;
       }>;
-    }>(`/v1/runs/${runId}`);
+    }>(`/runs/${runId}`);
   }
 
-  // Export API
-  async exportRun(runId: string, format: 'pdf' | 'docx' | 'json') {
-    return this.request<{ download_url: string }>(`/v1/runs/${runId}/export`, {
+  // Export API - Updated for FastAPI
+  async exportRun(runId: string, format: string = 'docx') {
+    const formData = new FormData();
+    formData.append('format', format);
+
+    return this.request<{ download_url: string }>(`/runs/${runId}/export`, {
       method: 'POST',
-      body: JSON.stringify({ format }),
+      headers: {
+        'ngrok-skip-browser-warning': 'true',
+      },
+      body: formData,
     });
+  }
+
+  // Test Arbiter API
+  async testArbiter(legalSubdomain: string = 'contract') {
+    const formData = new FormData();
+    formData.append('legal_subdomain', legalSubdomain);
+
+    return this.request<any>('/test-arbiter', {
+      method: 'POST',
+      headers: {
+        'ngrok-skip-browser-warning': 'true',
+      },
+      body: formData,
+    });
+  }
+
+  // Conversation History API
+  async getConversationHistory(matterId: string) {
+    return this.request<{
+      messages: Array<{
+        role: 'user' | 'assistant';
+        content: string;
+        timestamp: string;
+        run_id?: string;
+      }>;
+    }>(`/conversation/${matterId}`);
+  }
+
+  async clearConversationHistory(matterId: string) {
+    return this.request<{ success: boolean }>(`/conversation/${matterId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async exportConversationHistory(matterId: string) {
+    return this.request<{ download_url: string }>(`/conversation/${matterId}/export`);
   }
 
   // Notarization API - Phase 2 Subnet

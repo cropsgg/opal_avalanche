@@ -35,7 +35,8 @@ export function NetworkStatus({ className }: NetworkStatusProps) {
     checkConnection();
 
     // Listen for wallet events
-    if (typeof window !== 'undefined' && window.ethereum) {
+    if (typeof window !== 'undefined' && (window as any).ethereum) {
+      const ethereum = (window as any).ethereum;
       const handleAccountsChanged = (accounts: string[]) => {
         setWalletAddress(accounts[0] || null);
         setIsConnected(accounts.length > 0);
@@ -45,12 +46,12 @@ export function NetworkStatus({ className }: NetworkStatusProps) {
         setUserChainId(parseInt(chainId, 16));
       };
 
-      window.ethereum.on('accountsChanged', handleAccountsChanged);
-      window.ethereum.on('chainChanged', handleChainChanged);
+      ethereum.on('accountsChanged', handleAccountsChanged);
+      ethereum.on('chainChanged', handleChainChanged);
 
       return () => {
-        window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
-        window.ethereum.removeListener('chainChanged', handleChainChanged);
+        ethereum.removeListener('accountsChanged', handleAccountsChanged);
+        ethereum.removeListener('chainChanged', handleChainChanged);
       };
     }
   }, []);
@@ -60,8 +61,8 @@ export function NetworkStatus({ className }: NetworkStatusProps) {
     const checkHealth = async () => {
       try {
         // Simple health check - try to get block number
-        if (typeof window !== 'undefined' && window.ethereum && isConnected) {
-          await window.ethereum.request({ method: 'eth_blockNumber' });
+        if (typeof window !== 'undefined' && (window as any).ethereum && isConnected) {
+          await (window as any).ethereum.request({ method: 'eth_blockNumber' });
           setNetworkHealth('healthy');
         }
       } catch (error) {
@@ -77,10 +78,11 @@ export function NetworkStatus({ className }: NetworkStatusProps) {
   }, [isConnected]);
 
   const checkConnection = async () => {
-    if (typeof window !== 'undefined' && window.ethereum) {
+    if (typeof window !== 'undefined' && (window as any).ethereum) {
       try {
-        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        const ethereum = (window as any).ethereum;
+        const accounts = await ethereum.request({ method: 'eth_accounts' });
+        const chainId = await ethereum.request({ method: 'eth_chainId' });
 
         setIsConnected(accounts.length > 0);
         setWalletAddress(accounts[0] || null);

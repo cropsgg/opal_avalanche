@@ -6,6 +6,7 @@ import { ChatHeader } from "@/components/chat/ChatHeader";
 import { ChatInput } from "@/components/chat/ChatInput";
 import { ChatMessages } from "@/components/chat/ChatMessages";
 import { CitationsPanel } from "@/components/chat/CitationsPanel";
+import { apiClient } from "@/lib/api";
 import { Inter, Poppins } from "next/font/google";
 
 const poppins = Poppins({
@@ -28,6 +29,7 @@ export interface Message {
   jurisdiction?: string;
   agents?: string[];
   explainability?: string;
+  runId?: string;
 }
 
 export interface Citation {
@@ -37,13 +39,37 @@ export interface Citation {
   excerpt: string;
   relevanceScore: number;
   url?: string;
+  cite?: string;
+  para_ids?: number[];
 }
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [citations, setCitations] = useState<Citation[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [matterId, setMatterId] = useState<string | null>(null);
+  const [currentRunId, setCurrentRunId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Create a matter when the component loads
+  useEffect(() => {
+    const createMatter = async () => {
+      try {
+        const response = await apiClient.createMatter({
+          title: `Chat Session - ${new Date().toLocaleDateString()}`
+        });
+        
+        if (response.data) {
+          const id = 'matter_id' in response.data ? response.data.matter_id : response.data.id;
+          setMatterId(id);
+        }
+      } catch (error) {
+        console.error('Failed to create matter:', error);
+      }
+    };
+    
+    createMatter();
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -58,6 +84,11 @@ export default function ChatPage() {
     caseType: string,
     jurisdiction: string
   ) => {
+    if (!matterId) {
+      console.error('Matter ID not available');
+      return;
+    }
+
     const userMessage: Message = {
       id: Date.now().toString(),
       type: 'user',
@@ -71,10 +102,13 @@ export default function ChatPage() {
     setIsLoading(true);
 
     try {
+      // Determine if this is a follow-up message
+      const isFollowUp = currentRunId && messages.length > 0;
+      
       // Send two parallel requests - one for citations and one for the LLM response
       const [citationsResponse, llmResponse] = await Promise.all([
-        fetchCitations(content, caseType, jurisdiction),
-        fetchLLMResponse(content, caseType, jurisdiction),
+        fetchCitations(content, caseType, jurisdiction, matterId, isFollowUp ? currentRunId : undefined),
+        fetchLLMResponse(content, caseType, jurisdiction, matterId, isFollowUp ? currentRunId : undefined),
       ]);
 
       // Update citations
@@ -94,7 +128,13 @@ export default function ChatPage() {
           timestamp: new Date(),
           agents: isFirstResponse ? llmResponse.agents : undefined,
           explainability: isFirstResponse ? llmResponse.explainability : undefined,
+          runId: llmResponse.runId,
         };
+
+        // Store the run ID for follow-up messages
+        if (llmResponse.runId) {
+          setCurrentRunId(llmResponse.runId);
+        }
 
         setMessages(prev => [...prev, assistantMessage]);
       }
@@ -116,10 +156,11 @@ export default function ChatPage() {
   const fetchCitations = async (
     content: string,
     caseType: string,
-    jurisdiction: string
+    jurisdiction: string,
+    matterId: string,
+    runId?: string
   ): Promise<Citation[] | null> => {
     try {
-      // Replace with your actual API endpoint
       const response = await fetch('/api/chat/citations', {
         method: 'POST',
         headers: {
@@ -129,6 +170,8 @@ export default function ChatPage() {
           query: content,
           caseType,
           jurisdiction,
+          matterId,
+          runId,
         }),
       });
 
@@ -145,10 +188,11 @@ export default function ChatPage() {
   const fetchLLMResponse = async (
     content: string,
     caseType: string,
-    jurisdiction: string
+    jurisdiction: string,
+    matterId: string,
+    runId?: string
   ): Promise<any | null> => {
     try {
-      // Replace with your actual API endpoint
       const response = await fetch('/api/chat/llm', {
         method: 'POST',
         headers: {
@@ -158,6 +202,8 @@ export default function ChatPage() {
           query: content,
           caseType,
           jurisdiction,
+          matterId,
+          runId,
         }),
       });
 

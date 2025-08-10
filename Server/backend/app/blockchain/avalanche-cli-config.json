@@ -1,0 +1,11 @@
+{
+  "network": "local",
+  "subnet-name": "opal-private-subnet",
+  "vm": "Subnet-EVM",
+  "genesis": "./genesis.json",
+  "validators": 3,
+  "chain-config": {
+    "chainId": 43210,
+    "networkUpgrades": {}
+  }
+}

@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8001
+      - DEBUG=false
+      - LOG_LEVEL=INFO
+      - QDRANT_URL=http://qdrant:6333
+      - SERVER_API_URL=http://backend:8001
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - qdrant
+    networks:
+      - opal-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend Dashboard
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - SERVER_API_URL=http://backend:8001
+    depends_on:
+      - backend
+    networks:
+      - opal-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Vector Database
+  qdrant:
+    image: qdrant/qdrant:v1.7.0
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__HTTP_PORT=6333
+      - QDRANT__SERVICE__GRPC_PORT=6334
+    networks:
+      - opal-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx Reverse Proxy (Production)
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - opal-network
+    restart: unless-stopped
+    profiles:
+      - production
+
+volumes:
+  qdrant_data:
+
+networks:
+  opal-network:
+    driver: bridge

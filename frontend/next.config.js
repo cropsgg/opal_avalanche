@@ -17,6 +17,7 @@ const nextConfig = {
   experimental: {
     serverActions: true,
   },
+  optimizeFonts: false,
   env: {
     // Load environment variables from the root .env file
     ...require('dotenv').config({ path: path.resolve(__dirname, '../.env') }).parsed,

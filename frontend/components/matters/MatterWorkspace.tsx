@@ -69,22 +69,18 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
     try {
       // Load matter details
       const matterResponse = await apiClient.getMatter(matterId);
-      if (matterResponse.error) {
-        setError(matterResponse.error);
-      } else if (matterResponse.data) {
+      if (matterResponse.data) {
         setMatter(matterResponse.data);
       }
       setIsLoadingMatter(false);
 
       // Load documents
       const documentsResponse = await apiClient.getDocuments(matterId);
-      if (documentsResponse.error) {
-        console.warn('Failed to load documents:', documentsResponse.error);
-      } else if (documentsResponse.data) {
+      if (documentsResponse.data) {
         setDocuments(documentsResponse.data);
 
         // Check if any documents are still processing
-        const hasProcessingDocs = documentsResponse.data.some(doc =>
+        const hasProcessingDocs = documentsResponse.data.length > 0 && documentsResponse.data.some((doc: any) =>
           doc.ocr_status === 'processing' || doc.ocr_status === 'pending'
         );
         if (hasProcessingDocs && !isNewlyCreated) {

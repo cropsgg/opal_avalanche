@@ -1,26 +1,47 @@
 import { NextRequest, NextResponse } from "next/server";
+import { apiClient } from "@/lib/api";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { query, caseType, jurisdiction } = body;
+    const { query, caseType, jurisdiction, matterId, runId } = body;
 
-    // Mock LLM response - replace with your actual API logic
-    const mockResponse = {
-      content: `Based on the analysis of your ${caseType} case in ${jurisdiction}, here's my assessment:
+    let response;
+    
+    if (runId) {
+      // This is a follow-up message
+      response = await apiClient.sendChatFollowup({
+        matter_id: matterId,
+        run_id: runId,
+        message: query,
+      });
+    } else {
+      // This is the initial chat message
+      if (!matterId) {
+        return NextResponse.json(
+          { error: "Matter ID is required" },
+          { status: 400 }
+        );
+      }
 
-The key legal principles that apply to your situation involve several important considerations. First, the relevant statutory framework provides specific guidance that must be followed. Additionally, case law precedents establish clear standards for evaluation.
+      response = await apiClient.sendChatMessage({
+        matter_id: matterId,
+        message: query,
+        case_type: caseType,
+        jurisdiction_region: jurisdiction,
+      });
+    }
 
-In your jurisdiction (${jurisdiction}), the courts have consistently held that similar cases require careful examination of the factual circumstances and application of established legal standards.
+    if (response.error) {
+      return NextResponse.json(
+        { error: response.error },
+        { status: response.status }
+      );
+    }
 
-My recommendation would be to:
-1. Gather all relevant documentation
-2. Consider alternative dispute resolution options
-3. Evaluate the strength of your legal position
-4. Consult with local counsel if needed
-
-This analysis takes into account the specific legal landscape in ${jurisdiction} and the nuances of ${caseType} matters.`,
-
+    // Format response for frontend
+    const formattedResponse = {
+      content: response.data?.answer || 'No response received',
       agents: [
         "Ethics Agent",
         "Precedent Agent",
@@ -30,14 +51,13 @@ This analysis takes into account the specific legal landscape in ${jurisdiction}
         "Aggregator Agent",
         "Base Agent"
       ],
-
-      explainability: `This verdict was reached through a comprehensive analysis involving seven specialized AI agents. The Ethics Agent ensured moral and professional standards were met, while the Precedent Agent analyzed relevant case law. The Devil's Advocate Agent challenged assumptions and identified potential weaknesses. The Drafting Agent structured the legal reasoning, and the Limitation Agent identified scope and jurisdictional constraints. The Aggregator Agent synthesized all perspectives, and the Base Agent provided foundational legal principles. Each agent contributed unique expertise to ensure a well-rounded, thorough analysis of your ${caseType} matter in ${jurisdiction}.`
+      explainability: `This verdict was reached through a comprehensive analysis involving seven specialized AI agents. Each agent contributed unique expertise to ensure a well-rounded, thorough analysis of your ${caseType || 'legal'} matter in ${jurisdiction || 'the specified jurisdiction'}.`,
+      runId: response.data?.run_id,
+      confidence: response.data?.confidence,
+      evidenceMerkleRoot: (response.data as any)?.evidence_merkle_root
     };
 
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    return NextResponse.json(mockResponse);
+    return NextResponse.json(formattedResponse);
 
   } catch (error) {
     console.error("Error in LLM API:", error);
