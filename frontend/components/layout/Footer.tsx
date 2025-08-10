@@ -128,7 +128,7 @@ export function Footer() {
             <div className="p-2 rounded-md bg-brown-700 text-cream-100">
               <Scale className="h-4 w-4" />
             </div>
-            <span className="text-lg font-display font-bold text-brown-900 tracking-tight">
+            <span className="text-lg  font-bold text-brown-900 tracking-tight">
               OPAL
             </span>
           </div>

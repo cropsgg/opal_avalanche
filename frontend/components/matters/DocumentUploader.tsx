@@ -5,12 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  Upload, 
-  FileText, 
-  Image, 
-  X, 
-  CheckCircle, 
+import {
+  Upload,
+  FileText,
+  Image,
+  X,
+  CheckCircle,
   AlertCircle,
   Loader2
 } from 'lucide-react';
@@ -48,11 +48,11 @@ export function DocumentUploader({ matterId, onUploadComplete }: DocumentUploade
     if (!SUPPORTED_FILE_TYPES.includes(file.type as any)) {
       return `File type ${file.type} is not supported. Please upload PDF, DOCX, or image files.`;
     }
-    
+
     if (file.size > MAX_FILE_SIZE) {
       return `File size exceeds 50MB limit. Please compress or split the file.`;
     }
-    
+
     return null;
   };
 
@@ -76,8 +76,8 @@ export function DocumentUploader({ matterId, onUploadComplete }: DocumentUploade
   const uploadFile = async (uploadFile: UploadFile) => {
     if (uploadFile.status !== 'pending') return;
 
-    setUploadFiles(prev => prev.map(f => 
-      f.id === uploadFile.id 
+    setUploadFiles(prev => prev.map(f =>
+      f.id === uploadFile.id
         ? { ...f, status: 'uploading', progress: 0 }
         : f
     ));
@@ -85,7 +85,7 @@ export function DocumentUploader({ matterId, onUploadComplete }: DocumentUploade
     try {
       // Simulate progress updates
       const progressInterval = setInterval(() => {
-        setUploadFiles(prev => prev.map(f => 
+        setUploadFiles(prev => prev.map(f =>
           f.id === uploadFile.id && f.progress < 90
             ? { ...f, progress: f.progress + 10 }
             : f
@@ -97,8 +97,8 @@ export function DocumentUploader({ matterId, onUploadComplete }: DocumentUploade
       clearInterval(progressInterval);
 
       if (response.error) {
-        setUploadFiles(prev => prev.map(f => 
-          f.id === uploadFile.id 
+        setUploadFiles(prev => prev.map(f =>
+          f.id === uploadFile.id
             ? { ...f, status: 'error', progress: 0, error: response.error }
             : f
         ));
@@ -108,8 +108,8 @@ export function DocumentUploader({ matterId, onUploadComplete }: DocumentUploade
           variant: 'destructive'
         });
       } else {
-        setUploadFiles(prev => prev.map(f => 
-          f.id === uploadFile.id 
+        setUploadFiles(prev => prev.map(f =>
+          f.id === uploadFile.id
             ? { ...f, status: 'success', progress: 100 }
             : f
         ));
@@ -119,8 +119,8 @@ export function DocumentUploader({ matterId, onUploadComplete }: DocumentUploade
         });
       }
     } catch (error) {
-      setUploadFiles(prev => prev.map(f => 
-        f.id === uploadFile.id 
+      setUploadFiles(prev => prev.map(f =>
+        f.id === uploadFile.id
           ? { ...f, status: 'error', progress: 0, error: 'Upload failed' }
           : f
       ));
@@ -134,11 +134,11 @@ export function DocumentUploader({ matterId, onUploadComplete }: DocumentUploade
 
   const uploadAllFiles = async () => {
     const pendingFiles = uploadFiles.filter(f => f.status === 'pending');
-    
+
     for (const file of pendingFiles) {
       await uploadFile(file);
     }
-    
+
     // Refresh the parent component after all uploads
     onUploadComplete();
   };
@@ -174,7 +174,7 @@ export function DocumentUploader({ matterId, onUploadComplete }: DocumentUploade
   return (
     <Card className="bg-white border-stone-200">
       <CardHeader>
-        <CardTitle className="text-xl font-display text-brown-900 flex items-center gap-2">
+        <CardTitle className="text-xl  text-brown-900 flex items-center gap-2">
           <Upload className="h-5 w-5" />
           Upload Documents
         </CardTitle>
@@ -183,8 +183,8 @@ export function DocumentUploader({ matterId, onUploadComplete }: DocumentUploade
         {/* Upload Area */}
         <div
           className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-            isDragging 
-              ? 'border-brown-500 bg-brown-50' 
+            isDragging
+              ? 'border-brown-500 bg-brown-50'
               : 'border-stone-300 hover:border-brown-400 hover:bg-stone-50'
           }`}
           onDragOver={handleDragOver}
@@ -198,7 +198,7 @@ export function DocumentUploader({ matterId, onUploadComplete }: DocumentUploade
           <p className="text-sm text-brown-500 mb-4">
             Drag and drop files here, or click to browse
           </p>
-          <Button 
+          <Button
             onClick={() => fileInputRef.current?.click()}
             className="bg-brown-700 hover:bg-brown-600 text-cream-100"
             disabled={hasUploading}
@@ -254,20 +254,20 @@ export function DocumentUploader({ matterId, onUploadComplete }: DocumentUploade
                       <p className="text-xs text-brown-500">
                         {(uploadFile.file.size / 1024 / 1024).toFixed(2)} MB
                       </p>
-                      
+
                       {uploadFile.status === 'uploading' && (
                         <div className="mt-2">
                           <Progress value={uploadFile.progress} className="h-2" />
                         </div>
                       )}
-                      
+
                       {uploadFile.error && (
                         <p className="text-xs text-red-600 mt-1">
                           {uploadFile.error}
                         </p>
                       )}
                     </div>
-                    
+
                     <div className="flex items-center space-x-2">
                       {uploadFile.status === 'uploading' && (
                         <Loader2 className="h-4 w-4 animate-spin text-brown-600" />
@@ -296,7 +296,7 @@ export function DocumentUploader({ matterId, onUploadComplete }: DocumentUploade
 
             {hasPending && (
               <div className="flex justify-end">
-                <Button 
+                <Button
                   onClick={uploadAllFiles}
                   disabled={hasUploading}
                   className="bg-brown-700 hover:bg-brown-600 text-cream-100"
@@ -319,7 +319,7 @@ export function DocumentUploader({ matterId, onUploadComplete }: DocumentUploade
         <Alert>
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            Documents will be automatically processed with OCR if needed. 
+            Documents will be automatically processed with OCR if needed.
             Processing may take a few minutes for scanned documents.
           </AlertDescription>
         </Alert>

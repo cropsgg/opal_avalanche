@@ -29,13 +29,13 @@ export default function NewMatterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate form
     const newErrors: Record<string, string> = {};
     if (!formData.title.trim()) {
       newErrors.title = 'Matter title is required';
     }
-    
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -130,7 +130,7 @@ export default function NewMatterPage() {
         {/* Main Form */}
         <Card className="bg-white border-stone-200">
           <CardHeader>
-            <CardTitle className="text-xl font-display text-brown-900">Matter Details</CardTitle>
+            <CardTitle className="text-xl  text-brown-900">Matter Details</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -163,8 +163,8 @@ export default function NewMatterPage() {
                 <Label htmlFor="language" className="text-sm font-medium text-brown-700">
                   Primary Language
                 </Label>
-                <Select 
-                  value={formData.language} 
+                <Select
+                  value={formData.language}
                   onValueChange={(value: 'en' | 'hi') => handleInputChange('language', value)}
                   disabled={isLoading}
                 >
@@ -206,8 +206,8 @@ export default function NewMatterPage() {
                     Cancel
                   </Button>
                 </Link>
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   disabled={isLoading || !formData.title.trim()}
                   className="bg-brown-700 hover:bg-brown-600 text-cream-100"
                 >

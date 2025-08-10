@@ -27,7 +27,7 @@ class ApiClient {
           };
         }
       }
-      
+
       return {
         'Content-Type': 'application/json',
       };
@@ -221,10 +221,10 @@ class ApiClient {
 
   // Notarization API - Phase 2 Subnet
   async notarizeRun(runId: string, usePrivateSubnet: boolean = true) {
-    const endpoint = usePrivateSubnet 
+    const endpoint = usePrivateSubnet
       ? `/v1/subnet/runs/${runId}/notarize`
       : `/v1/runs/${runId}/notarize`;
-      
+
     return this.request<{
       tx_hash: string;
       block_number: number;
@@ -244,10 +244,10 @@ class ApiClient {
   }
 
   async getNotarization(runId: string, usePrivateSubnet: boolean = true) {
-    const endpoint = usePrivateSubnet 
+    const endpoint = usePrivateSubnet
       ? `/v1/subnet/notary/${runId}`
       : `/v1/notary/${runId}`;
-      
+
     return this.request<{
       run_id: string;
       merkle_root: string;
@@ -309,6 +309,43 @@ class ApiClient {
       credits_balance: number;
       renews_at?: string;
     }>('/v1/subscriptions');
+  }
+
+  // Search API
+  async search(query: string, filters?: {
+    type?: 'case' | 'statute' | 'document' | 'precedent';
+    date_from?: string;
+    date_to?: string;
+    limit?: number;
+    offset?: number;
+  }) {
+    const params = new URLSearchParams();
+    params.append('q', query);
+
+    if (filters) {
+      if (filters.type) params.append('type', filters.type);
+      if (filters.date_from) params.append('date_from', filters.date_from);
+      if (filters.date_to) params.append('date_to', filters.date_to);
+      if (filters.limit) params.append('limit', filters.limit.toString());
+      if (filters.offset) params.append('offset', filters.offset.toString());
+    }
+
+    return this.request<{
+      results: Array<{
+        id: string;
+        title: string;
+        description: string;
+        type: 'case' | 'statute' | 'document' | 'precedent';
+        date?: string;
+        source?: string;
+        relevance_score?: number;
+        url?: string;
+        excerpt?: string;
+      }>;
+      total: number;
+      query: string;
+      took: number; // search time in ms
+    }>(`/v1/search?${params.toString()}`);
   }
 }
 

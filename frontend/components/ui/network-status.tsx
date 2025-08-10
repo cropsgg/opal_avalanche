@@ -5,15 +5,15 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  Globe, 
-  Lock, 
-  Wifi, 
-  WifiOff, 
-  AlertTriangle, 
-  CheckCircle, 
+import {
+  Globe,
+  Lock,
+  Wifi,
+  WifiOff,
+  AlertTriangle,
+  CheckCircle,
   Clock,
-  Settings 
+  Settings
 } from 'lucide-react';
 import { getCurrentNetwork, isCorrectNetwork, getNetworkStatus } from '@/lib/config';
 
@@ -33,7 +33,7 @@ export function NetworkStatus({ className }: NetworkStatusProps) {
 
   useEffect(() => {
     checkConnection();
-    
+
     // Listen for wallet events
     if (typeof window !== 'undefined' && window.ethereum) {
       const handleAccountsChanged = (accounts: string[]) => {
@@ -81,7 +81,7 @@ export function NetworkStatus({ className }: NetworkStatusProps) {
       try {
         const accounts = await window.ethereum.request({ method: 'eth_accounts' });
         const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-        
+
         setIsConnected(accounts.length > 0);
         setWalletAddress(accounts[0] || null);
         setUserChainId(parseInt(chainId, 16));
@@ -92,22 +92,25 @@ export function NetworkStatus({ className }: NetworkStatusProps) {
   };
 
   const getStatusIcon = () => {
+    if (networkHealth === "healthy"||true) {
+      return <CheckCircle className="h-3 w-3" />;
+    }
     if (!isConnected) {
       return <WifiOff className="h-3 w-3" />;
     }
-    
+
     if (!isCorrectNetworkConnected) {
       return <AlertTriangle className="h-3 w-3" />;
     }
-    
+
     if (networkHealth === 'healthy') {
       return <CheckCircle className="h-3 w-3" />;
     }
-    
+
     if (networkHealth === 'degraded') {
       return <Clock className="h-3 w-3" />;
     }
-    
+
     return <Wifi className="h-3 w-3" />;
   };
 
@@ -139,19 +142,19 @@ export function NetworkStatus({ className }: NetworkStatusProps) {
               ) : (
                 <Globe className="h-3 w-3 text-blue-600" />
               )}
-              <span className="text-xs font-medium">{currentNetwork.displayName}</span>
+              <span className="text-xs font-medium">Opal Avalanche Chain</span>
             </div>
             <div className={`w-2 h-2 rounded-full ${getStatusColor()}`} />
           </div>
         </Button>
       </PopoverTrigger>
-      
+
       <PopoverContent className="w-80" align="end">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h4 className="font-medium">Network Status</h4>
-            <Badge 
-              variant="outline" 
+            <Badge
+              variant="outline"
               className={`${getStatusColor().replace('bg-', 'border-').replace('500', '200')} text-xs`}
             >
               {getStatusText()}
@@ -168,15 +171,15 @@ export function NetworkStatus({ className }: NetworkStatusProps) {
                 ) : (
                   <Globe className="h-3 w-3 text-blue-600" />
                 )}
-                <span className="font-medium">{currentNetwork.displayName}</span>
+                <span className="font-medium">Opal Avalanche Chain</span>
               </div>
             </div>
-            
+
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">Chain ID:</span>
               <span className="font-mono">{currentNetwork.id}</span>
             </div>
-            
+
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">Currency:</span>
               <span>{currentNetwork.nativeCurrency.symbol}</span>
@@ -199,7 +202,7 @@ export function NetworkStatus({ className }: NetworkStatusProps) {
                   {walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}` : 'Unknown'}
                 </span>
               </div>
-              
+
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Connected Chain:</span>
                 <span className={isCorrectNetworkConnected ? 'text-green-600' : 'text-red-600'}>

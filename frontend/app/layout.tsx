@@ -36,7 +36,7 @@ export default function RootLayout({
         elements: {
           formButtonPrimary: 'bg-brown-700 hover:bg-brown-600 text-cream-100',
           card: 'shadow-lg border border-stone-200',
-          headerTitle: 'text-brown-900 font-display',
+          headerTitle: 'text-brown-900 ',
           headerSubtitle: 'text-brown-500',
           socialButtonsBlockButton: 'border-stone-300 hover:bg-stone-50',
           formFieldInput: 'border-stone-300 focus:border-brown-500',
@@ -54,7 +54,7 @@ export default function RootLayout({
       }}
     >
       <html lang="en" className={inter.variable}>
-        <body className="min-h-screen bg-cream-50 font-sans antialiased">
+        <body className="min-h-screen bg-cream-50 font-inter antialiased">
           <ErrorBoundary>
             <div className="relative flex min-h-screen flex-col">
               <main className="flex-1">

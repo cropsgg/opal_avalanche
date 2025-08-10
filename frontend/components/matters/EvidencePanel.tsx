@@ -6,12 +6,12 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  FileText, 
-  ExternalLink, 
-  Pin, 
-  GitCompare as Compare, 
-  Filter, 
+import {
+  FileText,
+  ExternalLink,
+  Pin,
+  GitCompare as Compare,
+  Filter,
   Scale,
   Calendar,
   MapPin,
@@ -60,7 +60,7 @@ export function EvidencePanel({ evidence, onDocumentJump }: EvidencePanelProps) 
     return (
       <Card className="bg-cream-100 border-stone-200">
         <CardHeader>
-          <CardTitle className="text-lg font-display text-brown-900 flex items-center gap-2">
+          <CardTitle className="text-lg  text-brown-900 flex items-center gap-2">
             <Scale className="h-5 w-5" />
             Evidence Panel
           </CardTitle>
@@ -68,7 +68,7 @@ export function EvidencePanel({ evidence, onDocumentJump }: EvidencePanelProps) 
         <CardContent>
           <div className="text-center py-12 text-brown-500">
             <Scale className="h-16 w-16 mx-auto mb-4 opacity-50" />
-            <h3 className="text-lg font-display font-semibold mb-2">No Evidence Selected</h3>
+            <h3 className="text-lg  font-semibold mb-2">No Evidence Selected</h3>
             <p className="text-sm mb-4">
               Click on citation buttons in the chat to view detailed legal evidence and supporting documents
             </p>
@@ -88,14 +88,14 @@ export function EvidencePanel({ evidence, onDocumentJump }: EvidencePanelProps) 
     <Card className="bg-cream-100 border-stone-200">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-display text-brown-900 flex items-center gap-2">
+          <CardTitle className="text-lg  text-brown-900 flex items-center gap-2">
             <Scale className="h-5 w-5" />
             Legal Evidence
           </CardTitle>
           <div className="flex gap-2">
-            <Button 
-              variant="ghost" 
-              size="sm" 
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => setIsPinned(!isPinned)}
               className={`text-brown-700 ${isPinned ? 'bg-brown-100' : ''}`}
             >
@@ -107,14 +107,14 @@ export function EvidencePanel({ evidence, onDocumentJump }: EvidencePanelProps) 
           </div>
         </div>
       </CardHeader>
-      
+
       <CardContent className="space-y-4">
         {/* Main Evidence Card */}
         <div className="bg-white rounded-lg border border-stone-200 p-4">
           {/* Header */}
           <div className="flex items-start justify-between mb-4">
             <div className="flex-1">
-              <h3 className="text-lg font-display font-bold text-brown-900 mb-2">
+              <h3 className="text-lg  font-bold text-brown-900 mb-2">
                 {evidence.case}
               </h3>
               <div className="flex items-center gap-2 mb-2">
@@ -139,7 +139,7 @@ export function EvidencePanel({ evidence, onDocumentJump }: EvidencePanelProps) 
               <TabsTrigger value="paragraphs" className="text-xs">Paragraphs</TabsTrigger>
               <TabsTrigger value="analysis" className="text-xs">Analysis</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="details" className="mt-4 space-y-3">
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div className="space-y-2">
@@ -149,7 +149,7 @@ export function EvidencePanel({ evidence, onDocumentJump }: EvidencePanelProps) 
                   </div>
                   <p className="text-brown-700 ml-6">{evidence.court}</p>
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-brown-500" />
@@ -158,7 +158,7 @@ export function EvidencePanel({ evidence, onDocumentJump }: EvidencePanelProps) 
                   <p className="text-brown-700 ml-6">{evidence.date || 'Not specified'}</p>
                 </div>
               </div>
-              
+
               {evidence.snippet && (
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
@@ -171,21 +171,21 @@ export function EvidencePanel({ evidence, onDocumentJump }: EvidencePanelProps) 
                 </div>
               )}
             </TabsContent>
-            
+
             <TabsContent value="paragraphs" className="mt-4">
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-sm font-medium">
                   <FileText className="h-4 w-4 text-brown-500" />
                   Referenced Paragraphs ({evidence.paragraphs.length})
                 </div>
-                
+
                 <div className="space-y-2">
                   {evidence.paragraphs.map((para, index) => (
                     <div key={index} className="flex items-center justify-between p-2 bg-stone-50 rounded">
                       <span className="text-sm font-mono">Paragraph {para}</span>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
+                      <Button
+                        variant="outline"
+                        size="sm"
                         className="text-xs"
                         onClick={() => onDocumentJump(evidence.authority_id, para)}
                       >
@@ -197,17 +197,17 @@ export function EvidencePanel({ evidence, onDocumentJump }: EvidencePanelProps) 
                 </div>
               </div>
             </TabsContent>
-            
+
             <TabsContent value="analysis" className="mt-4">
               <div className="space-y-4">
                 <Alert>
                   <Info className="h-4 w-4" />
                   <AlertDescription>
-                    This case is highly relevant to your query based on legal precedent analysis 
+                    This case is highly relevant to your query based on legal precedent analysis
                     and contextual similarity to your matter.
                   </AlertDescription>
                 </Alert>
-                
+
                 <div className="space-y-2">
                   <h4 className="font-medium text-brown-900">Legal Significance:</h4>
                   <ul className="text-sm text-brown-700 space-y-1 ml-4">
@@ -222,9 +222,9 @@ export function EvidencePanel({ evidence, onDocumentJump }: EvidencePanelProps) 
 
           {/* Action Buttons */}
           <div className="flex gap-2 mt-4 pt-4 border-t border-stone-200">
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               className="text-brown-700 flex-1"
               onClick={() => onDocumentJump(evidence.authority_id, evidence.paragraphs[0])}
             >

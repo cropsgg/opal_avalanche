@@ -40,10 +40,10 @@ export function MattersGrid({ matters, onRefresh }: MattersGridProps) {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-display font-bold" style={{ color: 'orangered' }}>Your Matters</h2>
+        <h2 className="text-2xl  font-bold" style={{ color: 'orangered' }}>Your Matters</h2>
         <Link href="/matters/new">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="hover:bg-gray-50"
             style={{ borderColor: 'orangered', color: 'orangered' }}
           >
@@ -61,7 +61,7 @@ export function MattersGrid({ matters, onRefresh }: MattersGridProps) {
               Create your first matter to start your legal research journey
             </p>
             <Link href="/matters/new">
-              <Button 
+              <Button
                 className="text-white hover:opacity-90"
                 style={{ backgroundColor: 'orangered' }}
               >
@@ -74,26 +74,26 @@ export function MattersGrid({ matters, onRefresh }: MattersGridProps) {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {matters.map((matter) => (
-            <Card 
-              key={matter.id} 
+            <Card
+              key={matter.id}
               className="hover:shadow-lg transition-all"
               style={{ backgroundColor: 'white', borderColor: '#D1D5DB' }}
             >
               <CardHeader className="pb-3">
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
-                    <h3 className="text-lg font-display font-semibold mb-2" style={{ color: 'orangered' }}>
+                    <h3 className="text-lg  font-semibold mb-2" style={{ color: 'orangered' }}>
                       {matter.title}
                     </h3>
                     <div className="flex items-center gap-2 mb-2">
-                      <Badge 
+                      <Badge
                         variant="secondary"
                         style={getStatusColor(matter.status || 'active')}
                       >
                         {matter.status || 'active'}
                       </Badge>
-                      <Badge 
-                        variant="outline" 
+                      <Badge
+                        variant="outline"
                         style={{ borderColor: 'orangered', color: 'orangered' }}
                       >
                         {matter.language === 'hi' ? 'Hindi' : 'English'}
@@ -119,7 +119,7 @@ export function MattersGrid({ matters, onRefresh }: MattersGridProps) {
                   </div>
                 </div>
                 <Link href={`/matters/${matter.id}`}>
-                  <Button 
+                  <Button
                     className="w-full text-white hover:opacity-90"
                     style={{ backgroundColor: 'orangered' }}
                   >

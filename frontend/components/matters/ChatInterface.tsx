@@ -79,7 +79,7 @@ export function ChatInterface({ matterId, disabled, onEvidenceSelect, onRunCompl
           description: response.error,
           variant: 'destructive'
         });
-        
+
         // Remove loading message on error
         setMessages(prev => prev.filter(msg => msg.id !== userMessage.id));
         return;
@@ -110,7 +110,7 @@ export function ChatInterface({ matterId, disabled, onEvidenceSelect, onRunCompl
         if (aiMessage.evidence && aiMessage.evidence.length > 0) {
           onEvidenceSelect(aiMessage.evidence[0]);
         }
-        
+
         // Show success notification
         toast({
           title: 'Analysis Complete',
@@ -131,7 +131,7 @@ export function ChatInterface({ matterId, disabled, onEvidenceSelect, onRunCompl
         description: 'Failed to send message. Please try again.',
         variant: 'destructive'
       });
-      
+
       // Remove user message on error
       setMessages(prev => prev.filter(msg => msg.id !== userMessage.id));
     } finally {
@@ -149,7 +149,7 @@ export function ChatInterface({ matterId, disabled, onEvidenceSelect, onRunCompl
       const now = new Date();
       const diffMs = now.getTime() - date.getTime();
       const diffMins = Math.floor(diffMs / 60000);
-      
+
       if (diffMins < 1) return 'Just now';
       if (diffMins < 60) return `${diffMins}m ago`;
       if (diffMins < 1440) return `${Math.floor(diffMins / 60)}h ago`;
@@ -215,7 +215,7 @@ export function ChatInterface({ matterId, disabled, onEvidenceSelect, onRunCompl
       {/* Chat Interface */}
       <Card className="bg-cream-100 border-stone-200 h-[600px] flex flex-col">
         <CardHeader className="pb-4">
-          <CardTitle className="text-xl font-display text-brown-900 flex items-center gap-2">
+          <CardTitle className="text-xl  text-brown-900 flex items-center gap-2">
             <Bot className="h-5 w-5" />
             Legal Research Chat
           </CardTitle>
@@ -233,8 +233,8 @@ export function ChatInterface({ matterId, disabled, onEvidenceSelect, onRunCompl
                     Start Your Legal Research
                   </h3>
                   <p className="text-brown-500 text-sm max-w-md">
-                    Ask questions about your case, search for precedents, check limitation periods, 
-                    or get help with document drafting. OPAL&apos;s AI will search through legal authorities 
+                    Ask questions about your case, search for precedents, check limitation periods,
+                    or get help with document drafting. OPAL&apos;s AI will search through legal authorities
                     and provide detailed analysis with citations.
                   </p>
                 </div>
@@ -256,23 +256,23 @@ export function ChatInterface({ matterId, disabled, onEvidenceSelect, onRunCompl
                 }`}>
                   {message.type === 'user' ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
                 </div>
-                
+
                 <div className={`rounded-lg p-4 ${
-                  message.type === 'user' 
-                    ? 'bg-brown-700 text-cream-100' 
+                  message.type === 'user'
+                    ? 'bg-brown-700 text-cream-100'
                     : 'bg-white border border-stone-200 shadow-sm'
                 }`}>
                   <div className="whitespace-pre-wrap text-sm leading-relaxed">
                     {message.content}
                   </div>
-                  
+
                   {/* Confidence indicator for AI messages */}
                   {message.type === 'assistant' && message.confidence && (
                     <div className="mt-2 flex items-center gap-2">
                       <span className="text-xs text-brown-500">Confidence:</span>
                       <div className="flex-1 bg-stone-200 rounded-full h-1.5">
-                        <div 
-                          className="bg-green-500 h-1.5 rounded-full" 
+                        <div
+                          className="bg-green-500 h-1.5 rounded-full"
                           style={{ width: `${message.confidence * 100}%` }}
                         />
                       </div>
@@ -281,7 +281,7 @@ export function ChatInterface({ matterId, disabled, onEvidenceSelect, onRunCompl
                       </span>
                     </div>
                   )}
-                  
+
                   {message.evidence && message.evidence.length > 0 && (
                     <div className="mt-3 space-y-2">
                       <div className="text-xs text-brown-500 font-medium flex items-center gap-1">
@@ -307,7 +307,7 @@ export function ChatInterface({ matterId, disabled, onEvidenceSelect, onRunCompl
                       </div>
                     </div>
                   )}
-                  
+
                   <div className="flex items-center justify-between mt-3 pt-2 border-t border-opacity-20">
                     <div className="text-xs opacity-70">
                       {formatTimestamp(message.timestamp)}
@@ -322,7 +322,7 @@ export function ChatInterface({ matterId, disabled, onEvidenceSelect, onRunCompl
               </div>
             </div>
           ))}
-          
+
           {isLoading && (
             <div className="flex gap-3 justify-start">
               <div className="w-8 h-8 rounded-full bg-gold-500 text-brown-900 flex items-center justify-center">
@@ -348,7 +348,7 @@ export function ChatInterface({ matterId, disabled, onEvidenceSelect, onRunCompl
               </div>
             </div>
           )}
-          
+
           <div ref={messagesEndRef} />
         </div>
 
@@ -360,8 +360,8 @@ export function ChatInterface({ matterId, disabled, onEvidenceSelect, onRunCompl
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder={
-                  disabled 
-                    ? 'Please wait for document processing to complete...' 
+                  disabled
+                    ? 'Please wait for document processing to complete...'
                     : mode === 'precedent'
                     ? 'Ask about relevant case precedents, binding authorities, or conflicting decisions...'
                     : mode === 'limitation'
@@ -384,8 +384,8 @@ export function ChatInterface({ matterId, disabled, onEvidenceSelect, onRunCompl
                 <span>{input.length}/2000</span>
               </div>
             </div>
-            <Button 
-              onClick={handleSend} 
+            <Button
+              onClick={handleSend}
               disabled={disabled || isLoading || !input.trim() || input.length > 2000}
               className="bg-brown-700 hover:bg-brown-600 text-cream-100 self-end"
               size="lg"

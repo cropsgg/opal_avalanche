@@ -39,7 +39,7 @@ export function FeaturesSection() {
     <section className="py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-brown-900 mb-4">
+          <h2 className="text-3xl md:text-4xl  font-bold text-brown-900 mb-4">
             Why Legal Professionals Choose OPAL
           </h2>
           <p className="text-xl text-brown-500 max-w-2xl mx-auto">
@@ -58,7 +58,7 @@ export function FeaturesSection() {
                       <Icon className="h-6 w-6" />
                     </div>
                   </div>
-                  <h3 className="text-xl font-display font-semibold text-brown-900 mb-3">
+                  <h3 className="text-xl  font-semibold text-brown-900 mb-3">
                     {feature.title}
                   </h3>
                   <p className="text-brown-500 leading-relaxed">

@@ -2,10 +2,10 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { 
-  FileText, 
-  MessageSquare, 
-  Download, 
+import {
+  FileText,
+  MessageSquare,
+  Download,
   Shield,
   Clock,
   ArrowRight
@@ -60,7 +60,7 @@ export function RecentActivity({ activities }: RecentActivityProps) {
     return (
       <Card style={{ backgroundColor: 'white', borderColor: '#D1D5DB' }}>
         <CardHeader>
-          <CardTitle className="text-lg font-display" style={{ color: 'orangered' }}>Recent Activity</CardTitle>
+          <CardTitle className="text-lg " style={{ color: 'orangered' }}>Recent Activity</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-center py-8">
@@ -76,7 +76,7 @@ export function RecentActivity({ activities }: RecentActivityProps) {
   return (
     <Card style={{ backgroundColor: 'white', borderColor: '#D1D5DB' }}>
       <CardHeader>
-        <CardTitle className="text-lg font-display" style={{ color: 'orangered' }}>Recent Activity</CardTitle>
+        <CardTitle className="text-lg " style={{ color: 'orangered' }}>Recent Activity</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -84,7 +84,7 @@ export function RecentActivity({ activities }: RecentActivityProps) {
             const Icon = getActivityIcon(activity.type);
             return (
               <div key={index} className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                <div 
+                <div
                   className="p-2 rounded-full"
                   style={getActivityColor(activity.type)}
                 >
@@ -98,8 +98,8 @@ export function RecentActivity({ activities }: RecentActivityProps) {
                     <p className="text-xs" style={{ color: '#6B7280' }}>
                       {formatActivityTime(activity.timestamp)}
                     </p>
-                    <Badge 
-                      variant="outline" 
+                    <Badge
+                      variant="outline"
                       className="text-xs"
                       style={{ borderColor: '#D1D5DB', color: '#6B7280' }}
                     >
@@ -111,10 +111,10 @@ export function RecentActivity({ activities }: RecentActivityProps) {
               </div>
             );
           })}
-          
+
           {activities.length > 5 && (
             <div className="text-center pt-4" style={{ borderTop: '1px solid #E5E7EB' }}>
-              <button 
+              <button
                 className="text-sm font-medium hover:opacity-80 transition-opacity"
                 style={{ color: 'orangered' }}
               >

@@ -2,67 +2,59 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { 
-  Plus, 
-  Upload, 
-  Search, 
+import {
+  Plus,
+  Upload,
+  Search,
   BookOpen,
   MessageSquare,
-  FileText 
+  FileText
 } from 'lucide-react';
 import Link from 'next/link';
 
 const quickActions = [
   {
-    title: 'Create New Matter',
-    description: 'Start a new legal research project',
+    title: "Create New Matter",
+    description: "Start a new legal research project",
     icon: Plus,
-    href: '/matters/new',
-    bgColor: 'orangered',
-    hoverBg: '#FF4500'
+    href: "/matters/new",
+    bgColor: "#000",
+    hoverBg: "#000",
   },
   {
-    title: 'Upload Documents',
-    description: 'Add documents to existing matter',
-    icon: Upload,
-    href: '/dashboard#upload',
-    bgColor: '#22C55E',
-    hoverBg: '#16A34A'
-  },
-  {
-    title: 'Search Precedents',
-    description: 'Quick search across legal database',
+    title: "Search Precedents",
+    description: "Quick search across legal database",
     icon: Search,
-    href: '/search',
-    bgColor: '#3B82F6',
-    hoverBg: '#2563EB'
+    href: "/search",
+    bgColor: "#000",
+    hoverBg: "#000",
   },
   {
-    title: 'View Knowledge Base',
-    description: 'Browse legal resources and guides',
+    title: "View Knowledge Base",
+    description: "Browse legal resources and guides",
     icon: BookOpen,
-    href: '/knowledge',
-    bgColor: '#8B5CF6',
-    hoverBg: '#7C3AED'
-  }
+    href: "/knowledge",
+    bgColor: "#000",
+    hoverBg: "#000",
+  },
 ];
 
 export function QuickActions() {
   return (
     <Card style={{ backgroundColor: 'white', borderColor: '#D1D5DB' }}>
       <CardHeader>
-        <CardTitle className="text-xl font-display" style={{ color: 'orangered' }}>Quick Actions</CardTitle>
+        <CardTitle className="text-xl" >Quick Actions</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {quickActions.map((action) => {
             const Icon = action.icon;
             return (
               <Link key={action.title} href={action.href}>
-                <Button 
-                  variant="outline" 
-                  className="w-full h-auto p-4 flex flex-col items-center space-y-2 hover:shadow-md transition-all text-white"
-                  style={{ 
+                <Button
+                  variant="outline"
+                  className="w-full h-auto p-4 flex flex-col items-center space-y-2 hover:scale-105 hover:shadow-md transition-all text-white"
+                  style={{
                     backgroundColor: action.bgColor,
                     borderColor: action.bgColor,
                     color: 'white'

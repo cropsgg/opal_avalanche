@@ -73,7 +73,7 @@ export function DocumentViewer({ matterId, documents, isLoading }: DocumentViewe
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-1 bg-cream-100 border-stone-200">
           <CardHeader>
-            <CardTitle className="text-lg font-display text-brown-900 flex items-center gap-2">
+            <CardTitle className="text-lg  text-brown-900 flex items-center gap-2">
               <FileText className="h-5 w-5" />
               Documents
             </CardTitle>
@@ -104,7 +104,7 @@ export function DocumentViewer({ matterId, documents, isLoading }: DocumentViewe
       {/* Document List */}
       <Card className="lg:col-span-1 bg-cream-100 border-stone-200">
         <CardHeader>
-          <CardTitle className="text-lg font-display text-brown-900 flex items-center gap-2">
+          <CardTitle className="text-lg  text-brown-900 flex items-center gap-2">
             <FileText className="h-5 w-5" />
             Documents ({documents.length})
           </CardTitle>
@@ -133,10 +133,10 @@ export function DocumentViewer({ matterId, documents, isLoading }: DocumentViewe
                         {getFileName(doc.storage_path)}
                       </h4>
                       <div className="flex items-center gap-2">
-                        <StatusIcon 
+                        <StatusIcon
                           className={`h-4 w-4 ${
                             doc.ocr_status === 'processing' ? 'animate-spin' : ''
-                          }`} 
+                          }`}
                         />
                         <Badge className={getStatusColor(doc.ocr_status)} variant="secondary">
                           {doc.ocr_status}
@@ -163,9 +163,9 @@ export function DocumentViewer({ matterId, documents, isLoading }: DocumentViewe
       <Card className="lg:col-span-2 bg-cream-100 border-stone-200">
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="text-lg font-display text-brown-900">
-              {selectedDocument 
-                ? getFileName(documents.find(d => d.id === selectedDocument)?.storage_path || '') 
+            <CardTitle className="text-lg  text-brown-900">
+              {selectedDocument
+                ? getFileName(documents.find(d => d.id === selectedDocument)?.storage_path || '')
                 : 'Select a document to view'
               }
             </CardTitle>
@@ -188,7 +188,7 @@ export function DocumentViewer({ matterId, documents, isLoading }: DocumentViewe
             <div className="bg-white rounded-lg border border-stone-200 h-[500px] flex items-center justify-center">
               <div className="text-center text-brown-500">
                 <FileText className="h-16 w-16 mx-auto mb-4 opacity-50" />
-                <p className="text-lg font-display mb-2">Document Viewer</p>
+                <p className="text-lg  mb-2">Document Viewer</p>
                 <p className="text-sm">
                   In a real implementation, this would show the PDF/document content
                   <br />
@@ -200,7 +200,7 @@ export function DocumentViewer({ matterId, documents, isLoading }: DocumentViewe
             <div className="h-[500px] flex items-center justify-center text-brown-500">
               <div className="text-center">
                 <Eye className="h-16 w-16 mx-auto mb-4 opacity-50" />
-                <p className="text-lg font-display">No document selected</p>
+                <p className="text-lg ">No document selected</p>
                 <p className="text-sm">Choose a document from the list to view it here</p>
               </div>
             </div>
