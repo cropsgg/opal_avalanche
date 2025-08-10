@@ -14,6 +14,7 @@ from app.api.v1 import exports as exports_router
 from app.api.v1 import health as health_router
 from app.api.v1 import matters as matters_router
 from app.api.v1 import notarization as notarization_router
+from app.api.v1 import subnet_notarization as subnet_notarization_router
 from app.api.v1 import privacy as privacy_router
 from app.api.v1 import runs as runs_router
 from app.api.v1 import subscriptions as subscriptions_router
@@ -102,6 +103,7 @@ app.include_router(documents_router.router, prefix="/v1", tags=["documents"])
 app.include_router(chat_router.router, prefix="/v1", tags=["chat"])
 app.include_router(runs_router.router, prefix="/v1", tags=["runs"])
 app.include_router(notarization_router.router, prefix="/v1", tags=["notarization"])
+app.include_router(subnet_notarization_router.router, prefix="/v1", tags=["subnet-notarization"])
 app.include_router(exports_router.router, prefix="/v1", tags=["exports"])
 app.include_router(privacy_router.router, prefix="/v1/privacy", tags=["privacy"])
 app.include_router(subscriptions_router.router, prefix="/v1/subscriptions", tags=["subscriptions"])

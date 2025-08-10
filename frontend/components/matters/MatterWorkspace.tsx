@@ -11,7 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ChatInterface } from './ChatInterface';
 import { DocumentViewer } from './DocumentViewer';
 import { EvidencePanel } from './EvidencePanel';
-import { Notarization } from './Notarization';
+import { SubnetNotarization } from './SubnetNotarization';
 // import { DocumentUploader } from './DocumentUploader';
 import { 
   MessageSquare, 
@@ -324,7 +324,7 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
             }}
           />
           
-          <Notarization 
+          <SubnetNotarization 
             matterId={matterId}
             isNotarized={isNotarized}
             runId={currentRunId}

@@ -1,0 +1,31 @@
+{
+  "name": "opal-private-subnet",
+  "chainId": 43210,
+  "token": {
+    "name": "OPAL Token",
+    "symbol": "OPAL",
+    "description": "Gas token for OPAL private subnet"
+  },
+  "vm": "Subnet-EVM",
+  "validatorSpecs": [
+    {
+      "nodeId": "VALIDATOR_1_NODE_ID_PLACEHOLDER",
+      "weight": 1,
+      "balance": "100000000000000000000"
+    },
+    {
+      "nodeId": "VALIDATOR_2_NODE_ID_PLACEHOLDER", 
+      "weight": 1,
+      "balance": "100000000000000000000"
+    },
+    {
+      "nodeId": "VALIDATOR_3_NODE_ID_PLACEHOLDER",
+      "weight": 1,
+      "balance": "100000000000000000000"
+    }
+  ],
+  "teleporter": false,
+  "relayerRewardAddress": "",
+  "useExternalGasToken": false,
+  "externalGasTokenConfig": {}
+}
