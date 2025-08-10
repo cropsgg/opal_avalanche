@@ -9,16 +9,16 @@ export function LandingHero() {
     <section className="relative py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center">
-          <h1 className="text-5xl md:text-6xl font-display font-bold text-brown-900 tracking-tight mb-6">
+          <h1 className="text-5xl md:text-6xl  font-bold text-brown-900 tracking-tight mb-6">
             AI-Powered Legal
             <span className="block text-gold-500">Research Assistant</span>
           </h1>
-          
+
           <p className="text-xl text-brown-500 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Transform your legal research with advanced AI that analyzes documents, 
+            Transform your legal research with advanced AI that analyzes documents,
             finds precedents, and provides verified citations with blockchain-backed provenance.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <SignUpButton mode="modal">
               <Button size="lg" className="bg-brown-700 hover:bg-brown-500 text-cream-100 border border-gold-500 px-8 py-3">

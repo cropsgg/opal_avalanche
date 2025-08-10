@@ -143,7 +143,7 @@ export function MatterCreationForm() {
       {/* Matter Information */}
       <Card className="bg-cream-100 border-stone-200">
         <CardHeader>
-          <CardTitle className="text-xl font-display text-brown-900">
+          <CardTitle className="text-xl  text-brown-900">
             Matter Information
           </CardTitle>
         </CardHeader>
@@ -160,7 +160,7 @@ export function MatterCreationForm() {
               disabled={isCreating}
             />
           </div>
-          
+
           <div>
             <Label htmlFor="description" className="text-brown-700">Description</Label>
             <Textarea
@@ -177,7 +177,7 @@ export function MatterCreationForm() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="language" className="text-brown-700">Document Language</Label>
-              <Select 
+              <Select
                 value={formData.language}
                 onValueChange={(value) => setFormData({ ...formData, language: value })}
                 disabled={isCreating}
@@ -195,7 +195,7 @@ export function MatterCreationForm() {
 
             <div>
               <Label htmlFor="jurisdiction" className="text-brown-700">Jurisdiction</Label>
-              <Select 
+              <Select
                 value={formData.jurisdiction}
                 onValueChange={(value) => setFormData({ ...formData, jurisdiction: value })}
                 disabled={isCreating}
@@ -219,7 +219,7 @@ export function MatterCreationForm() {
       {/* Document Upload */}
       <Card className="bg-cream-100 border-stone-200">
         <CardHeader>
-          <CardTitle className="text-xl font-display text-brown-900 flex items-center gap-2">
+          <CardTitle className="text-xl  text-brown-900 flex items-center gap-2">
             <FileText className="h-5 w-5" />
             Document Upload
           </CardTitle>
@@ -241,9 +241,9 @@ export function MatterCreationForm() {
 
       {/* Submit */}
       <div className="flex justify-end">
-        <Button 
-          type="submit" 
-          size="lg" 
+        <Button
+          type="submit"
+          size="lg"
           disabled={!formData.title || !formData.language || isCreating}
           className="bg-brown-700 hover:bg-brown-500 text-cream-100 border border-gold-500"
         >

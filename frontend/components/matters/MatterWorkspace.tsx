@@ -13,11 +13,11 @@ import { DocumentViewer } from './DocumentViewer';
 import { EvidencePanel } from './EvidencePanel';
 import { SubnetNotarization } from './SubnetNotarization';
 // import { DocumentUploader } from './DocumentUploader';
-import { 
-  MessageSquare, 
-  FileText, 
-  Shield, 
-  Download, 
+import {
+  MessageSquare,
+  FileText,
+  Shield,
+  Download,
   Share2,
   CheckCircle,
   Clock,
@@ -82,9 +82,9 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
         console.warn('Failed to load documents:', documentsResponse.error);
       } else if (documentsResponse.data) {
         setDocuments(documentsResponse.data);
-        
+
         // Check if any documents are still processing
-        const hasProcessingDocs = documentsResponse.data.some(doc => 
+        const hasProcessingDocs = documentsResponse.data.some(doc =>
           doc.ocr_status === 'processing' || doc.ocr_status === 'pending'
         );
         if (hasProcessingDocs && !isNewlyCreated) {
@@ -94,7 +94,7 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
             const updatedDocs = await apiClient.getDocuments(matterId);
             if (updatedDocs.data) {
               setDocuments(updatedDocs.data);
-              const stillProcessing = updatedDocs.data.some(doc => 
+              const stillProcessing = updatedDocs.data.some(doc =>
                 doc.ocr_status === 'processing' || doc.ocr_status === 'pending'
               );
               if (!stillProcessing) {
@@ -103,7 +103,7 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
               }
             }
           }, 5000);
-          
+
           // Clear polling after 5 minutes
           setTimeout(() => clearInterval(pollTimer), 300000);
         }
@@ -206,7 +206,7 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
       <div className="mb-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-display font-bold text-brown-900 mb-2">
+            <h1 className="text-3xl  font-bold text-brown-900 mb-2">
               {matter.title}
             </h1>
             <div className="flex items-center gap-4">
@@ -222,7 +222,7 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
               </span>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-2">
             <Button variant="outline" className="border-brown-700 text-brown-700">
               <Download className="h-4 w-4 mr-2" />
@@ -243,7 +243,7 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
             <div className="flex items-center gap-4">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold-500"></div>
               <div>
-                <h3 className="text-lg font-display font-semibold text-brown-900">
+                <h3 className="text-lg  font-semibold text-brown-900">
                   Processing Documents
                 </h3>
                 <p className="text-brown-500">
@@ -270,10 +270,10 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
                 Documents
               </TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="chat" className="mt-6">
-              <ChatInterface 
-                matterId={matterId} 
+              <ChatInterface
+                matterId={matterId}
                 disabled={isProcessing}
                 onEvidenceSelect={setSelectedEvidence}
                 onRunComplete={(runId: string) => {
@@ -282,7 +282,7 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
                 }}
               />
             </TabsContent>
-            
+
             <TabsContent value="documents" className="mt-6">
               <div className="space-y-6">
                 <Card>
@@ -304,8 +304,8 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
                     </div>
                   </CardContent>
                 </Card>
-                <DocumentViewer 
-                  matterId={matterId} 
+                <DocumentViewer
+                  matterId={matterId}
                   documents={documents}
                   isLoading={isLoadingDocuments}
                 />
@@ -316,15 +316,15 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
 
         {/* Right Column - Evidence and Notarization */}
         <div className="space-y-6">
-          <EvidencePanel 
+          <EvidencePanel
             evidence={selectedEvidence}
             onDocumentJump={(docId, paragraph) => {
               setActiveTab('documents');
               // Implement document jump logic
             }}
           />
-          
-          <SubnetNotarization 
+
+          <SubnetNotarization
             matterId={matterId}
             isNotarized={isNotarized}
             runId={currentRunId}

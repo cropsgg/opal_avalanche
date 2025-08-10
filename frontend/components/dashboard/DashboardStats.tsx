@@ -49,7 +49,7 @@ export function DashboardStats({ analytics }: DashboardStatsProps) {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm mb-1" style={{ color: '#6B7280' }}>{stat.label}</p>
-                  <p className="text-2xl font-display font-bold" style={{ color: 'orangered' }}>{stat.value}</p>
+                  <p className="text-2xl  font-bold" style={{ color: 'orangered' }}>{stat.value}</p>
                   <p className={`text-xs ${
                     stat.changeType === 'positive' ? 'text-green-600' : 'text-gray-500'
                   }`} style={{
