@@ -104,7 +104,7 @@ export default function HomePage() {
               </Badge>
               <Badge className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 text-base font-medium flex items-center">
                 <Globe className="h-4 w-4 mr-2" />
-                Chain ID: 43210
+                Chain ID: 43113
               </Badge>
             </div>
 

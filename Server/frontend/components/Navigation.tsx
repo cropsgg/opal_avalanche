@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { useAuth } from '@/contexts/AuthContext'
+import { Button } from '@/components/ui/button'
 import { 
   Home, 
   Blocks, 
@@ -11,7 +13,9 @@ import {
   Database,
   Zap,
   ChevronDown,
-  ExternalLink
+  ExternalLink,
+  LogOut,
+  User
 } from 'lucide-react'
 
 const navigation = [
@@ -24,6 +28,7 @@ const navigation = [
 
 export default function Navigation() {
   const pathname = usePathname()
+  const { user, logout } = useAuth()
 
   return (
     <nav className="bg-white/95 backdrop-blur-lg border-b border-brown-200 shadow-soft sticky top-0 z-50">
@@ -90,6 +95,14 @@ export default function Navigation() {
               <ExternalLink className="h-4 w-4 group-hover:scale-110 transition-transform" />
             </Link>
 
+            {/* User Info */}
+            {user && (
+              <div className="hidden md:flex items-center space-x-2 px-3 py-2 bg-blue-50 rounded-lg border border-blue-200">
+                <User className="h-4 w-4 text-blue-600" />
+                <span className="text-sm font-medium text-blue-700">{user.user_id}</span>
+              </div>
+            )}
+
             {/* Status Indicator */}
             <div className="flex items-center space-x-2 px-3 py-2 bg-green-50 rounded-lg border border-green-200">
               <div className="flex items-center space-x-2">
@@ -101,6 +114,17 @@ export default function Navigation() {
                 </span>
               </div>
             </div>
+
+            {/* Logout Button */}
+            <Button
+              onClick={logout}
+              variant="outline"
+              size="sm"
+              className="hidden md:flex items-center space-x-2 border-brown-300 text-brown-700 hover:bg-brown-50"
+            >
+              <LogOut className="h-4 w-4" />
+              <span>Logout</span>
+            </Button>
           </div>
         </div>
 

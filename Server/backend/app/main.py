@@ -13,6 +13,7 @@ from fastapi.responses import JSONResponse
 
 from .api.blockchain import router as blockchain_router
 from .api.knowledge_graph import router as knowledge_graph_router
+from .api.auth import router as auth_router, cleanup_expired_sessions
 from .config.settings import get_settings
 from .storage.qdrant_client import ensure_collection, health_check as qdrant_health
 
@@ -55,6 +56,9 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         log.warning("qdrant.collection_init_failed", error=str(e))
     
+    # Cleanup expired auth sessions periodically
+    cleanup_expired_sessions()
+    
     yield
     
     # Shutdown
@@ -84,6 +88,7 @@ app.add_middleware(
 )
 
 # Include routers
+app.include_router(auth_router, prefix="/api/v1/auth", tags=["authentication"])
 app.include_router(blockchain_router, prefix="/api/v1", tags=["blockchain"])
 app.include_router(knowledge_graph_router)
 

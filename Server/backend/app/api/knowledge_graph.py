@@ -25,10 +25,12 @@ class GraphNode(BaseModel):
     label: str
     content: str
     metadata: Dict[str, Any]
-    position: Dict[str, float]  # x, y coordinates
+    position: Dict[str, float]  # x, y, z coordinates for 3D
     cluster: int
     size: float  # Node size based on connections or importance
     color: str   # Color based on cluster or type
+    importance_score: Optional[float] = 0.5
+    blockchain_hash: Optional[str] = None
 
 class GraphEdge(BaseModel):
     source: str
@@ -57,11 +59,8 @@ CLUSTER_COLORS = [
 
 def get_qdrant_client():
     """Get Qdrant client instance"""
-    try:
-        return QdrantClient(url="http://qdrant:6333")
-    except Exception:
-        # Fallback to localhost for development
-        return QdrantClient(url="http://localhost:6333")
+    from ..storage.qdrant_client import get_qdrant
+    return get_qdrant()
 
 def compute_similarity_edges(vectors: List[List[float]], threshold: float = 0.7) -> List[Dict[str, Any]]:
     """Compute edges based on vector similarity"""
@@ -86,30 +85,34 @@ def compute_similarity_edges(vectors: List[List[float]], threshold: float = 0.7)
     
     return edges
 
-def compute_graph_layout(vectors: List[List[float]]) -> List[Dict[str, float]]:
-    """Compute 2D positions for graph nodes using t-SNE"""
+def compute_graph_layout(vectors: List[List[float]], use_3d: bool = True) -> List[Dict[str, float]]:
+    """Compute 3D positions for graph nodes using t-SNE"""
     if len(vectors) < 2:
-        return [{"x": 0, "y": 0} for _ in vectors]
+        return [{"x": 0, "y": 0, "z": 0} for _ in vectors]
     
     vectors_array = np.array(vectors)
     
-    # Use t-SNE for dimensionality reduction to 2D
+    # Use t-SNE for dimensionality reduction to 3D
+    n_components = 3 if use_3d else 2
     perplexity = min(30, len(vectors) - 1)
     if perplexity < 1:
         perplexity = 1
         
-    tsne = TSNE(n_components=2, perplexity=perplexity, random_state=42)
-    positions_2d = tsne.fit_transform(vectors_array)
+    tsne = TSNE(n_components=n_components, perplexity=perplexity, random_state=42)
+    positions = tsne.fit_transform(vectors_array)
     
     # Normalize positions to [0, 1000] range for better visualization
-    min_vals = positions_2d.min(axis=0)
-    max_vals = positions_2d.max(axis=0)
+    min_vals = positions.min(axis=0)
+    max_vals = positions.max(axis=0)
     ranges = max_vals - min_vals
     ranges[ranges == 0] = 1  # Avoid division by zero
     
-    normalized_positions = (positions_2d - min_vals) / ranges * 1000
+    normalized_positions = (positions - min_vals) / ranges * 1000
     
-    return [{"x": float(pos[0]), "y": float(pos[1])} for pos in normalized_positions]
+    if use_3d:
+        return [{"x": float(pos[0]), "y": float(pos[1]), "z": float(pos[2])} for pos in normalized_positions]
+    else:
+        return [{"x": float(pos[0]), "y": float(pos[1]), "z": 0} for pos in normalized_positions]
 
 def compute_clusters(vectors: List[List[float]], n_clusters: int = 8) -> List[int]:
     """Compute clusters using K-means"""
@@ -139,14 +142,17 @@ async def get_knowledge_graph(
         collections = client.get_collections()
         collection_names = [col.name for col in collections.collections]
         
-        if "Opal_db_1000" not in collection_names:
+        from ..config.settings import get_settings
+        settings = get_settings()
+        collection_name = settings.QDRANT_COLLECTION
+        if collection_name not in collection_names:
             raise HTTPException(
                 status_code=404, 
-                detail="Collection 'Opal_db_1000' not found. Available collections: " + ", ".join(collection_names)
+                detail=f"Collection '{collection_name}' not found. Available collections: " + ", ".join(collection_names)
             )
         
         # Get collection info
-        collection_info = client.get_collection("Opal_db_1000")
+        collection_info = client.get_collection(collection_name)
         
         # Search or scroll through the collection
         if search_query:
@@ -154,7 +160,7 @@ async def get_knowledge_graph(
             # Note: This requires having an embedding model to encode the query
             # For now, we'll use scroll with payload filtering
             points = client.scroll(
-                collection_name="Opal_db_1000",
+                collection_name=collection_name,
                 limit=limit,
                 with_payload=True,
                 with_vectors=True
@@ -162,7 +168,7 @@ async def get_knowledge_graph(
         else:
             # Scroll through all points
             points = client.scroll(
-                collection_name="Opal_db_1000",
+                collection_name=collection_name,
                 limit=limit,
                 with_payload=True,
                 with_vectors=True
@@ -184,17 +190,37 @@ async def get_knowledge_graph(
             vectors.append(point.vector)
             payload = point.payload or {}
             
+            # Use stored 3D positions if available, otherwise compute
+            if all(key in payload for key in ["position_x", "position_y", "position_z"]):
+                position = {
+                    "x": payload["position_x"],
+                    "y": payload["position_y"], 
+                    "z": payload["position_z"]
+                }
+            else:
+                position = {"x": 0, "y": 0, "z": 0}
+            
             node_data.append({
                 "id": str(point.id),
                 "content": payload.get("text", ""),
-                "metadata": payload
+                "metadata": payload,
+                "position": position,
+                "cluster": payload.get("cluster", 0),
+                "blockchain_hash": payload.get("blockchain_hash"),
+                "importance_score": payload.get("importance_score", 0.5)
             })
         
-        # Compute graph layout using t-SNE
-        positions = compute_graph_layout(vectors)
+        # Use stored clusters if available, otherwise compute
+        if all("cluster" in data["metadata"] for data in node_data):
+            cluster_labels = [data["cluster"] for data in node_data]
+        else:
+            cluster_labels = compute_clusters(vectors, cluster_count)
         
-        # Compute clusters
-        cluster_labels = compute_clusters(vectors, cluster_count)
+        # Use stored positions if available, otherwise compute
+        if all(data["position"]["x"] != 0 or data["position"]["y"] != 0 for data in node_data):
+            positions = [data["position"] for data in node_data]
+        else:
+            positions = compute_graph_layout(vectors, use_3d=True)
         
         # Compute similarity edges
         edges_data = compute_similarity_edges(vectors, min_similarity)
@@ -209,21 +235,30 @@ async def get_knowledge_graph(
         
         # Create nodes
         nodes = []
-        for i, (data, position, cluster) in enumerate(zip(node_data, positions, cluster_labels)):
+        for i, data in enumerate(node_data):
             node_id = data["id"]
             centrality_score = centrality.get(str(i), 0)
+            cluster = data["cluster"]
+            position = data["position"]
             
-            # Determine node size based on centrality (20-80 range)
-            size = 20 + (centrality_score * 60)
+            # Determine node size based on importance and centrality
+            importance = data.get("importance_score", 0.5)
+            size = 15 + (importance * 40) + (centrality_score * 25)
             
-            # Get cluster color
+            # Get cluster color with enhanced palette
             color = CLUSTER_COLORS[cluster % len(CLUSTER_COLORS)]
             
-            # Create node label from content
+            # Create node label from title or content
+            title = data["metadata"].get("title", "")
             content = data["content"]
-            label = content[:50] + "..." if len(content) > 50 else content
+            
+            if title:
+                label = title[:60] + "..." if len(title) > 60 else title
+            else:
+                label = content[:50] + "..." if len(content) > 50 else content
+                
             if not label.strip():
-                label = f"Node {i + 1}"
+                label = f"Supreme Court Case {i + 1}"
             
             nodes.append(GraphNode(
                 id=node_id,
@@ -233,7 +268,9 @@ async def get_knowledge_graph(
                 position=position,
                 cluster=cluster,
                 size=size,
-                color=color
+                color=color,
+                importance_score=importance,
+                blockchain_hash=data.get("blockchain_hash")
             ))
         
         # Create edges with correct node IDs
@@ -287,18 +324,21 @@ async def get_graph_stats():
         collections = client.get_collections()
         collection_names = [col.name for col in collections.collections]
         
-        if "Opal_db_1000" not in collection_names:
+        from ..config.settings import get_settings
+        settings = get_settings()
+        collection_name = settings.QDRANT_COLLECTION
+        if collection_name not in collection_names:
             return {
                 "collection_exists": False,
                 "available_collections": collection_names
             }
         
         # Get collection info
-        collection_info = client.get_collection("Opal_db_1000")
+        collection_info = client.get_collection(collection_name)
         
         # Get a sample of points to analyze
         sample_points = client.scroll(
-            collection_name="Opal_db_1000",
+            collection_name=collection_name,
             limit=10,
             with_payload=True
         )[0]

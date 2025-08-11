@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     # Qdrant Vector Database
     QDRANT_URL: str = "http://localhost:6333"
     QDRANT_API_KEY: Optional[str] = None
-    QDRANT_COLLECTION: str = "opal_chunks"
+    QDRANT_COLLECTION: str = "Opal_db_1000"
     
     # OpenAI (for embedding generation)
     OPENAI_API_KEY: Optional[str] = None

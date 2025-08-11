@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Playfair_Display, Merriweather } from 'next/font/google'
 import './globals.css'
 import Navigation from '@/components/Navigation'
+import { AuthProvider } from '@/contexts/AuthContext'
+import ProtectedRoute from '@/components/auth/ProtectedRoute'
 
 const playfair = Playfair_Display({ 
   subsets: ['latin'], 
@@ -37,12 +39,16 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${playfair.variable} ${merriweather.variable}`}>
       <body className="min-h-screen bg-gradient-warm text-brown-900 font-body antialiased">
-        <div className="min-h-screen">
-          <Navigation />
-          <main className="relative">
-            {children}
-          </main>
-        </div>
+        <AuthProvider>
+          <ProtectedRoute>
+            <div className="min-h-screen">
+              <Navigation />
+              <main className="relative">
+                {children}
+              </main>
+            </div>
+          </ProtectedRoute>
+        </AuthProvider>
         
         {/* Background decorative elements */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">

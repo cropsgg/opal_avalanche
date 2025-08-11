@@ -1,184 +1,128 @@
 'use client'
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import React, { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Slider } from '@/components/ui/slider'
+import { Search, Filter, Eye, EyeOff, BarChart3, Network, Sparkles, Gavel, Scale, Shield, AlertCircle } from 'lucide-react'
+import { LoadingSpinner } from '@/components/ui/loading-spinner'
+import { knowledgeGraphApi } from '@/lib/api'
+import type { KnowledgeGraphData, GraphStats } from '@/types'
 
-import { 
-  Loader2, 
-  Search, 
-  Network, 
-  Database, 
-  Filter,
-  Zap,
-  Eye,
-  BarChart3,
-  Maximize2,
-  Download,
-  RefreshCw,
-  Info,
-  Settings
-} from 'lucide-react'
-import { knowledgeGraphApi, apiUtils } from '@/lib/api'
-import { KnowledgeGraphData, GraphStats as IGraphStats, GraphFilterRequest, GraphNode, GraphEdge } from '@/types'
-import KnowledgeGraphVisualizer from '@/components/knowledge-graph/KnowledgeGraphVisualizer'
-import GraphStatsComponent from '@/components/knowledge-graph/GraphStats'
-import NodeDetails from '@/components/knowledge-graph/NodeDetails'
+// Dynamically import the 3D component to avoid SSR issues
+const KnowledgeGraph3D = dynamic(
+  () => import('@/components/knowledge-graph/KnowledgeGraph3D').catch(() => 
+    import('@/components/knowledge-graph/KnowledgeGraph2D')
+  ), 
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center h-full">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading 3D Knowledge Graph...</p>
+        </div>
+      </div>
+    )
+  }
+)
 
 export default function KnowledgeGraphPage() {
-  // State management
+  const [selectedNode, setSelectedNode] = useState<string>()
+  const [showEdges, setShowEdges] = useState(true)
+  const [clusterFilter, setClusterFilter] = useState<number[]>([])
+  const [searchTerm, setSearchTerm] = useState('')
   const [graphData, setGraphData] = useState<KnowledgeGraphData | null>(null)
-  const [graphStats, setGraphStats] = useState<IGraphStats | null>(null)
-  const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null)
+  const [graphStats, setGraphStats] = useState<GraphStats | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string>('')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [filters, setFilters] = useState<GraphFilterRequest>({
-    limit: 100,
-    min_similarity: 0.7
-  })
-  const [activeView, setActiveView] = useState<'graph' | 'stats' | 'details'>('graph')
+  const [error, setError] = useState<string | null>(null)
 
-  // Fetch initial data
-  const fetchGraphData = useCallback(async () => {
-    setIsLoading(true)
-    setError('')
-    
+  useEffect(() => {
+    loadGraphData()
+    loadGraphStats()
+  }, [])
+
+  const loadGraphData = async () => {
     try {
-      const [data, stats] = await Promise.all([
-        knowledgeGraphApi.getKnowledgeGraph({
-          limit: filters.limit,
-          min_similarity: filters.min_similarity,
-          search_query: searchQuery || undefined,
-          cluster_count: 8
-        }),
-        knowledgeGraphApi.getGraphStats()
-      ])
-      
+      setIsLoading(true)
+      setError(null)
+      const data = await knowledgeGraphApi.getKnowledgeGraph({
+        limit: 100,
+        min_similarity: 0.7
+      })
       setGraphData(data)
-      setGraphStats(stats)
-    } catch (err) {
-      setError(apiUtils.formatError(err))
+    } catch (error) {
+      console.error('Failed to load knowledge graph:', error)
+      setError('Failed to load knowledge graph data. Please check if the backend is running and accessible.')
     } finally {
       setIsLoading(false)
     }
-  }, [filters, searchQuery])
+  }
 
-  // Search with debouncing
-  const performSearch = useCallback(async () => {
-    if (!searchQuery.trim()) {
-      await fetchGraphData()
+  const loadGraphStats = async () => {
+    try {
+      const stats = await knowledgeGraphApi.getGraphStats()
+      setGraphStats(stats)
+    } catch (error) {
+      console.error('Failed to load graph stats:', error)
+    }
+  }
+
+  const handleSearch = async () => {
+    if (!searchTerm.trim()) {
+      await loadGraphData()
       return
     }
 
-    setIsLoading(true)
-    setError('')
-
     try {
+      setIsLoading(true)
       const data = await knowledgeGraphApi.searchKnowledgeGraph({
-        ...filters,
-        search_query: searchQuery
+        search_query: searchTerm,
+        limit: 100,
+        min_similarity: 0.7
       })
       setGraphData(data)
-    } catch (err) {
-      setError(apiUtils.formatError(err))
+    } catch (error) {
+      console.error('Search failed:', error)
+      setError('Search failed. Please try again.')
     } finally {
       setIsLoading(false)
     }
-  }, [searchQuery, filters, fetchGraphData])
+  }
 
-  // Initial load
-  useEffect(() => {
-    fetchGraphData()
-  }, [fetchGraphData])
+  const selectedNode_data = graphData?.nodes.find(n => n.id === selectedNode)
 
-  // Handle node selection
-  const handleNodeClick = useCallback((node: GraphNode) => {
-    setSelectedNode(node)
-    setActiveView('details')
-  }, [])
+  const clusterStats = graphData ? Object.entries(graphData.clusters).map(([id, cluster]) => ({
+    cluster: parseInt(id),
+    topic: `Cluster ${id}`,
+    count: cluster.size,
+    color: cluster.color
+  })) : []
 
-  // Handle export
-  const handleExport = useCallback(() => {
-    if (!graphData) return
-    
-    const dataStr = JSON.stringify(graphData, null, 2)
-    const dataBlob = new Blob([dataStr], { type: 'application/json' })
-    const url = URL.createObjectURL(dataBlob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `knowledge-graph-${new Date().toISOString().split('T')[0]}.json`
-    link.click()
-    URL.revokeObjectURL(url)
-  }, [graphData])
-
-  // Compute graph metrics
-  const graphMetrics = useMemo(() => {
-    if (!graphData) return null
-
-    const nodeCount = graphData.nodes.length
-    const edgeCount = graphData.edges.length
-    const clusterCount = Object.keys(graphData.clusters).length
-    const avgConnections = nodeCount > 0 ? (edgeCount * 2) / nodeCount : 0
-    
-    // Find most connected node
-    const nodeDegrees = new Map<string, number>()
-    graphData.edges.forEach(edge => {
-      nodeDegrees.set(edge.source, (nodeDegrees.get(edge.source) || 0) + 1)
-      nodeDegrees.set(edge.target, (nodeDegrees.get(edge.target) || 0) + 1)
-    })
-    
-    const maxDegree = Math.max(...Array.from(nodeDegrees.values()), 0)
-    const mostConnectedNode = Array.from(nodeDegrees.entries())
-      .find(([_, degree]) => degree === maxDegree)?.[0]
-
-    return {
-      nodeCount,
-      edgeCount,
-      clusterCount,
-      avgConnections: avgConnections.toFixed(1),
-      maxDegree,
-      mostConnectedNode
-    }
-  }, [graphData])
-
-  if (!graphStats?.collection_exists) {
+  if (isLoading) {
     return (
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Knowledge Graph</h1>
-            <p className="text-gray-600 mt-1">Visualize the live knowledge database</p>
-          </div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <LoadingSpinner size="lg" />
+          <p className="text-gray-600 font-medium">Loading knowledge graph...</p>
         </div>
+      </div>
+    )
+  }
 
-        <Card className="border-red-200 bg-red-50">
-          <CardHeader>
-            <CardTitle className="text-red-800 flex items-center">
-              <Database className="h-5 w-5 mr-2" />
-              Collection Not Found
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-red-700 mb-4">
-              The collection &ldquo;Opal_db_1000&rdquo; was not found in the Qdrant database.
-            </p>
-            {graphStats?.available_collections && graphStats.available_collections.length > 0 && (
-              <div>
-                <p className="text-red-700 mb-2">Available collections:</p>
-                <div className="flex flex-wrap gap-2">
-                  {graphStats.available_collections.map(collection => (
-                    <Badge key={collection} variant="outline" className="text-red-700 border-red-300">
-                      {collection}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            )}
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 flex items-center justify-center">
+        <Card className="max-w-md bg-white/80 backdrop-blur-sm">
+          <CardContent className="p-6 text-center space-y-4">
+            <AlertCircle className="h-12 w-12 text-red-500 mx-auto" />
+            <h3 className="text-lg font-semibold text-gray-900">Connection Error</h3>
+            <p className="text-gray-600">{error}</p>
+            <Button onClick={loadGraphData} className="w-full">
+              Retry
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -186,229 +130,161 @@ export default function KnowledgeGraphPage() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Knowledge Graph</h1>
-          <p className="text-gray-600 mt-1">Visualize and explore the live knowledge database</p>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            onClick={fetchGraphData}
-            disabled={isLoading}
-            variant="outline"
-            size="sm"
-          >
-            <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
-          <Button
-            onClick={handleExport}
-            disabled={!graphData}
-            variant="outline"
-            size="sm"
-          >
-            <Download className="h-4 w-4 mr-2" />
-            Export
-          </Button>
-        </div>
-      </div>
-
-      {/* Quick Stats */}
-      {graphMetrics && (
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          <Card>
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold text-blue-600">{graphMetrics.nodeCount}</div>
-              <div className="text-sm text-gray-600">Nodes</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold text-green-600">{graphMetrics.edgeCount}</div>
-              <div className="text-sm text-gray-600">Connections</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold text-purple-600">{graphMetrics.clusterCount}</div>
-              <div className="text-sm text-gray-600">Clusters</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold text-orange-600">{graphMetrics.avgConnections}</div>
-              <div className="text-sm text-gray-600">Avg Connections</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="text-2xl font-bold text-red-600">{graphMetrics.maxDegree}</div>
-              <div className="text-sm text-gray-600">Max Degree</div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
-
-      {/* Controls */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center">
-            <Filter className="h-5 w-5 mr-2" />
-            Search & Filters
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex space-x-4">
-            <div className="flex-1">
-              <Input
-                placeholder="Search knowledge graph..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && performSearch()}
-              />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
+      {/* Hero Header */}
+      <section className="relative py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="flex items-center justify-center mb-6">
+            <div className="relative">
+              <div className="flex items-center justify-center w-20 h-20 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl shadow-lg">
+                <Network className="h-10 w-10 text-white" />
+              </div>
+              <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                <Sparkles className="w-4 h-4 text-white" />
+              </div>
             </div>
-            <Button onClick={performSearch} disabled={isLoading}>
-              <Search className="h-4 w-4 mr-2" />
-              Search
-            </Button>
           </div>
+          
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-6">
+            Knowledge Graph
+            <span className="block text-2xl md:text-3xl text-purple-600 font-normal mt-2">
+              Interactive Document Network Visualization
+            </span>
+          </h1>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">Node Limit</label>
-              <select 
-                value={filters.limit.toString()} 
-                onChange={(e) => setFilters(prev => ({ ...prev, limit: parseInt(e.target.value) }))}
-                className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <option value="50">50 nodes</option>
-                <option value="100">100 nodes</option>
-                <option value="200">200 nodes</option>
-                <option value="500">500 nodes</option>
-              </select>
+          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
+            Explore document relationships and patterns through an interactive network visualization.
+          </p>
+
+          {graphStats && (
+            <div className="flex flex-wrap justify-center gap-4 mb-8">
+              <Badge variant="secondary" className="bg-purple-100 text-purple-700 px-4 py-2">
+                <Gavel className="h-4 w-4 mr-2" />
+                {graphStats.total_points || 0} Documents
+              </Badge>
+              <Badge variant="secondary" className="bg-blue-100 text-blue-700 px-4 py-2">
+                <Network className="h-4 w-4 mr-2" />
+                {graphData?.edges.length || 0} Connections
+              </Badge>
+              <Badge variant="secondary" className="bg-green-100 text-green-700 px-4 py-2">
+                <Shield className="h-4 w-4 mr-2" />
+                Vector Database
+              </Badge>
             </div>
+          )}
+        </div>
+      </section>
 
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                Similarity Threshold: {filters.min_similarity.toFixed(2)}
-              </label>
-              <Slider
-                value={[filters.min_similarity]}
-                onValueChange={(value) => setFilters(prev => ({ ...prev, min_similarity: value[0] }))}
-                min={0.1}
-                max={1.0}
-                step={0.05}
-                className="w-full"
-              />
-            </div>
-
-            <div className="flex items-end">
-              <Button
-                onClick={fetchGraphData}
-                disabled={isLoading}
-                className="w-full"
-              >
-                {isLoading ? (
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                ) : (
-                  <Zap className="h-4 w-4 mr-2" />
-                )}
-                Apply Filters
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <Card className="bg-white/80 backdrop-blur-sm">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Network className="h-5 w-5" />
+              <span>Knowledge Graph Visualization</span>
+            </CardTitle>
+            <CardDescription>
+              Interactive visualization of document relationships and clusters
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Search Controls */}
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search documents..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                    className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+              <Button onClick={handleSearch} disabled={isLoading}>
+                Search
+              </Button>
+              <Button onClick={loadGraphData} variant="outline" disabled={isLoading}>
+                Reset
               </Button>
             </div>
-          </div>
-        </CardContent>
-      </Card>
 
-      {/* Error Display */}
-      {error && (
-        <Card className="border-red-200 bg-red-50">
-          <CardContent className="p-4">
-            <p className="text-red-700">{error}</p>
+            {/* Graph Visualization */}
+            {graphData && (
+              <div className="border-2 border-gray-200 rounded-lg">
+                <div className="h-[600px] relative bg-black/5">
+                  <KnowledgeGraph3D
+                    selectedNode={selectedNode}
+                    onNodeSelect={setSelectedNode}
+                    showEdges={showEdges}
+                    graphData={graphData}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Selected Node Details */}
+            {selectedNode_data && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Document Details</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-semibold">Label:</h4>
+                      <p>{selectedNode_data.label}</p>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold">Content Preview:</h4>
+                      <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded">
+                        {selectedNode_data.content.slice(0, 300)}...
+                      </p>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold">Metadata:</h4>
+                      <pre className="text-sm bg-gray-50 p-3 rounded overflow-auto">
+                        {JSON.stringify(selectedNode_data.metadata, null, 2)}
+                      </pre>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Statistics */}
+            {graphStats && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="text-2xl font-bold text-purple-600">
+                      {graphStats.total_points || 0}
+                    </div>
+                    <p className="text-sm text-gray-600">Total Documents</p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="text-2xl font-bold text-blue-600">
+                      {graphData?.edges.length || 0}
+                    </div>
+                    <p className="text-sm text-gray-600">Connections</p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="text-2xl font-bold text-green-600">
+                      {Object.keys(graphData?.clusters || {}).length}
+                    </div>
+                    <p className="text-sm text-gray-600">Clusters</p>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
           </CardContent>
         </Card>
-      )}
-
-      {/* Main Content */}
-      <Tabs value={activeView} onValueChange={(value) => setActiveView(value as any)}>
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="graph" className="flex items-center">
-            <Network className="h-4 w-4 mr-2" />
-            Graph View
-          </TabsTrigger>
-          <TabsTrigger value="stats" className="flex items-center">
-            <BarChart3 className="h-4 w-4 mr-2" />
-            Statistics
-          </TabsTrigger>
-          <TabsTrigger value="details" className="flex items-center">
-            <Info className="h-4 w-4 mr-2" />
-            Node Details
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="graph" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <span className="flex items-center">
-                  <Network className="h-5 w-5 mr-2" />
-                  Interactive Knowledge Graph
-                </span>
-                <Button
-                  onClick={() => setActiveView('stats')}
-                  variant="outline"
-                  size="sm"
-                >
-                  <Maximize2 className="h-4 w-4 mr-2" />
-                  Full Analysis
-                </Button>
-              </CardTitle>
-              <CardDescription>
-                Click on nodes to explore connections. Drag to navigate. Scroll to zoom.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {isLoading ? (
-                <div className="flex items-center justify-center h-96">
-                  <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-                  <span className="ml-2 text-gray-600">Loading knowledge graph...</span>
-                </div>
-              ) : graphData ? (
-                <KnowledgeGraphVisualizer
-                  data={graphData}
-                  onNodeClick={handleNodeClick}
-                  selectedNode={selectedNode}
-                />
-              ) : (
-                <div className="flex items-center justify-center h-96">
-                  <div className="text-center">
-                    <Database className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-600">No graph data available</p>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="stats" className="space-y-4">
-          <GraphStatsComponent 
-            graphData={graphData} 
-            graphStats={graphStats} 
-            isLoading={isLoading} 
-          />
-        </TabsContent>
-
-        <TabsContent value="details" className="space-y-4">
-          <NodeDetails 
-            node={selectedNode} 
-            graphData={graphData}
-            onNodeSelect={handleNodeClick}
-          />
-        </TabsContent>
-      </Tabs>
+      </div>
     </div>
   )
 }

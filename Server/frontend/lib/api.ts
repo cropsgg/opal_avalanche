@@ -28,6 +28,18 @@ const api = axios.create({
   },
 });
 
+// Auth token management
+let authToken: string | null = null;
+
+export const setAuthToken = (token: string | null) => {
+  authToken = token;
+  if (token) {
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  } else {
+    delete api.defaults.headers.common['Authorization'];
+  }
+};
+
 // Request interceptor for logging
 api.interceptors.request.use(
   (config) => {
@@ -149,6 +161,62 @@ export const knowledgeGraphApi = {
     const response = await api.post('/api/v1/knowledge-graph/search', filterRequest);
     return response.data;
   }
+};
+
+// Authentication API
+export const authApi = {
+  // Login
+  login: async (user_id: string, password: string): Promise<{
+    access_token: string;
+    token_type: string;
+    expires_in: number;
+    user_id: string;
+  }> => {
+    const response = await api.post('/api/v1/auth/login', {
+      user_id,
+      password,
+    });
+    return response.data;
+  },
+
+  // Logout
+  logout: async (token: string): Promise<void> => {
+    const tempApi = axios.create({
+      baseURL: API_BASE_URL,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    await tempApi.post('/api/v1/auth/logout');
+  },
+
+  // Get current user
+  getCurrentUser: async (token: string): Promise<{
+    user_id: string;
+    authenticated: boolean;
+    session_created: string;
+  }> => {
+    const tempApi = axios.create({
+      baseURL: API_BASE_URL,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    const response = await tempApi.get('/api/v1/auth/me');
+    return response.data;
+  },
+
+  // Get auth status
+  getAuthStatus: async (): Promise<{
+    auth_enabled: boolean;
+    active_sessions: number;
+    session_timeout: number;
+  }> => {
+    const response = await api.get('/api/v1/auth/status');
+    return response.data;
+  },
 };
 
 // Utility functions

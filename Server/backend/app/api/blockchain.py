@@ -12,6 +12,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
 import structlog
 
+from .auth import get_current_user, UserInfo
 from ..blockchain.subnet_client import get_subnet_client
 from ..blockchain.encryption import get_subnet_encryption, seal_audit_data
 from ..blockchain.merkle import merkle_root, para_hash
@@ -142,7 +143,10 @@ async def hash_documents(req: DocumentHashRequest) -> DocumentHashResponse:
 
 
 @router.post("/subnet/notarize", response_model=SubnetNotarizeResponse)
-async def subnet_notarize(req: SubnetNotarizeRequest) -> SubnetNotarizeResponse:
+async def subnet_notarize(
+    req: SubnetNotarizeRequest, 
+    current_user: UserInfo = Depends(get_current_user)
+) -> SubnetNotarizeResponse:
     """
     Notarize documents on the private Avalanche subnet
     Server pays all gas fees
@@ -154,7 +158,8 @@ async def subnet_notarize(req: SubnetNotarizeRequest) -> SubnetNotarizeResponse:
     log.info("subnet.notarize.start", 
              run_id=req.run_id,
              document_count=len(req.documents),
-             include_audit=req.include_audit_commit)
+             include_audit=req.include_audit_commit,
+             user_id=current_user.user_id)
     
     try:
         # Step 1: Process documents and compute Merkle root
