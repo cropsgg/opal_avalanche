@@ -1,7 +1,7 @@
 # ⚖️ OPAL – Avalanche Subnet GenAI Legal Co-Counsel for India
 
 <div align="center">
-  <img src="https://cryptologos.cc/logos/avalanche-avax-logo.png?v=026" alt="Avalanche Logo" width="200" height="200" />
+  <img src="https://github.com/cropsgg/ignition-logo/blob/master/Avalanche_Blockchain_Logo.webp" alt="Avalanche Logo" width="200" height="200" />
   
   **Empowering Indian lawyers with AI & Blockchain – Trust, Transparency, Compliance.**
 
