@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: opal-server
+    env: docker
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: DEBUG
+        value: false
+      - key: LOG_LEVEL
+        value: INFO
+      - key: HOST
+        value: 0.0.0.0
+      - key: PORT
+        value: 8001
+      - key: QDRANT_URL
+        value: http://localhost:6333
+      - key: QDRANT_COLLECTION
+        value: Opal_db_1000
+    # Add your environment variables here:
+    # - key: OPENAI_API_KEY
+    #   value: your_openai_api_key
+    # - key: SUBNET_RPC
+    #   value: your_subnet_rpc_url

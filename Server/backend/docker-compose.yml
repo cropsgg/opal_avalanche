@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  opal-server:
+    build: .
+    ports:
+      - "8001:8001"
+    environment:
+      - DEBUG=false
+      - LOG_LEVEL=INFO
+      - HOST=0.0.0.0
+      - PORT=8001
+      # Qdrant settings (if using external Qdrant)
+      - QDRANT_URL=http://qdrant:6333
+      - QDRANT_COLLECTION=Opal_db_1000
+      # OpenAI settings (set these in production)
+      # - OPENAI_API_KEY=your_openai_api_key
+      # Subnet settings (configure for your blockchain)
+      # - SUBNET_RPC=your_subnet_rpc_url
+      # - SUBNET_CHAIN_ID=43210
+      # - SUBNET_NOTARY_ADDR=your_notary_contract_address
+      # - SUBNET_COMMIT_ADDR=your_commit_contract_address
+      # - SUBNET_REGISTRY_ADDR=your_registry_contract_address
+      # - SUBNET_SENDER_PK=your_private_key
+    depends_on:
+      - qdrant
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__HTTP_PORT=6333
+    restart: unless-stopped
+
+volumes:
+  qdrant_storage:
