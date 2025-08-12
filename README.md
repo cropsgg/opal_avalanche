@@ -2,15 +2,19 @@
 
 <div align="center">
   <img src="./frontend/public/logo.png" alt="OPAL Logo" width="200" height="200" />
+  <span style="font-size: 48px; margin: 0 20px; vertical-align: middle; color: #666;">X</span>
+  <img src="https://github.com/cropsgg/ignition-logo/blob/master/Avalanche_Blockchain_Logo.webp?raw=true" alt="Avalanche Logo" width="200" height="200" />
   
   **Empowering Indian lawyers with AI & Blockchain – Trust, Transparency, Compliance.**
+
+  *OPAL × Avalanche: Legal AI meets Blockchain Innovation*
 
 
   [![Avalanche](https://img.shields.io/badge/Blockchain-Avalanche-red.svg)](https://avax.network/)
   
 </div>
 
----
+
 
 ## 🎯 Overview
 
@@ -18,45 +22,6 @@
 
 The platform leverages a sophisticated **DAO of Agents** architecture where multiple specialized AI agents collaborate through a democratic voting mechanism to provide comprehensive legal analysis, ensuring accuracy and reducing hallucination through collective intelligence.
 
----
-
-## 🖼️ Screenshots
-
-<div align="center">
-
-### Landing Page
-<img src="./frontend/public/images/image1.jpeg" alt="OPAL Landing Page" width="800"/>
-
-*Modern, intuitive landing page showcasing OPAL's AI-powered legal research capabilities*
-
-### Agent Dashboard
-<img src="./frontend/public/images/image2.jpeg" alt="Multi-Agent Dashboard" width="800"/>
-
-*Visual representation of the multi-agent system with specialized legal AI agents*
-
-### Legal Research Interface
-<img src="./frontend/public/images/image3.jpeg" alt="Legal Research Interface" width="800"/>
-
-*Advanced legal research interface with semantic search and citation verification*
-
-### Blockchain Notarization
-<img src="./frontend/public/images/image4.jpeg" alt="Blockchain Notarization" width="800"/>
-
-*Avalanche subnet integration for immutable legal research notarization*
-
-### Document Analysis
-<img src="./frontend/public/images/image5.jpeg" alt="Document Analysis" width="800"/>
-
-*AI-powered document analysis with automated citation extraction and verification*
-
-### Security & Compliance Dashboard
-<img src="./frontend/public/images/image6.jpeg" alt="Security Dashboard" width="800"/>
-
-*Comprehensive security and compliance monitoring with DPDP 2023 compliance*
-
-</div>
-
----
 
 ## ✨ Key Features
 
