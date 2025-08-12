@@ -160,7 +160,7 @@ export function SearchFiltersComponent({
                   onApplyFilters();
                   setIsOpen(false);
                 }}
-                className="flex-1 bg-brown-700 hover:bg-brown-600 text-cream-100"
+                className="flex-1 bg-black hover:bg-black/90 text-white"
               >
                 Apply Filters
               </Button>

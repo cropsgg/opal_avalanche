@@ -93,7 +93,9 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
         return (
           <span
             key={index}
-            ref={(el) => (wordRefs.current[index] = el)}
+            ref={(el) => {
+              wordRefs.current[index] = el;
+            }}
             className={`relative text-[4rem] text-legal-brow cursor-pointer font-baskervville`}
             style={
               {
@@ -120,7 +122,9 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
         return (
           <span
             key={index}
-            ref={(el) => (wordRefs.current[index] = el)}
+            ref={(el) => {
+              wordRefs.current[index] = el;
+            }}
             className={`relative text-[4rem] text-legal-brow cursor-pointer  ${baskervville.className}`}
             style={
               {

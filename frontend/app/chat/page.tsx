@@ -28,20 +28,37 @@ export interface Message {
   jurisdiction?: string;
   agents?: string[];
   explainability?: string;
+  // DAO enrichment
+  finalVerdict?: string;
+  finalConfidence?: number;
+  explanation?: {
+    issue: string;
+    rule: string;
+    application: string;
+    conclusion: string;
+  };
+  nextSteps?: string[];
+  daoDetails?: any;
+  verifierStatus?: string;
+  verifierNotes?: string;
+  audit?: any;
+  agentOutputs?: Array<{
+    agent: string;
+    verdict: string;
+    reasoning_summary: string;
+    detailed_reasoning: string;
+    sources: string[];
+    confidence: number;
+    current_weight: number;
+    weighted_score?: number;
+  }>;
 }
 
-export interface Citation {
-  id: string;
-  title: string;
-  source: string;
-  excerpt: string;
-  relevanceScore: number;
-  url?: string;
-}
+export type StructuredCitation = { type: string; reference: string };
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [citations, setCitations] = useState<Citation[]>([]);
+  const [citations, setCitations] = useState<StructuredCitation[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -71,20 +88,14 @@ export default function ChatPage() {
     setIsLoading(true);
 
     try {
-      // Send two parallel requests - one for citations and one for the LLM response
-      const [citationsResponse, llmResponse] = await Promise.all([
-        fetchCitations(content, caseType, jurisdiction),
-        fetchLLMResponse(content, caseType, jurisdiction),
-      ]);
+      // Fetch only the LLM structured response and derive citations from it
+      const llmResponse = await fetchLLMResponse(content, caseType, jurisdiction);
 
-      // Update citations
-      if (citationsResponse) {
-        setCitations(citationsResponse);
+      if (llmResponse?.citations) {
+        setCitations(llmResponse.citations);
       }
 
-      // Add LLM response
       if (llmResponse) {
-        // Check if this is the first response (show DAO verdict)
         const isFirstResponse = messages.length === 0;
 
         const assistantMessage: Message = {
@@ -94,13 +105,21 @@ export default function ChatPage() {
           timestamp: new Date(),
           agents: isFirstResponse ? llmResponse.agents : undefined,
           explainability: isFirstResponse ? llmResponse.explainability : undefined,
+          finalVerdict: llmResponse.final_verdict,
+          finalConfidence: llmResponse.final_confidence,
+          explanation: llmResponse.explanation,
+          nextSteps: llmResponse.next_steps,
+          daoDetails: llmResponse.dao_details,
+          verifierStatus: llmResponse.verifier_status,
+          verifierNotes: llmResponse.verifier_notes,
+          audit: llmResponse.audit,
+          agentOutputs: llmResponse.agent_outputs,
         };
 
         setMessages(prev => [...prev, assistantMessage]);
       }
     } catch (error) {
       console.error('Error sending message:', error);
-      // Add error message
       const errorMessage: Message = {
         id: (Date.now() + 2).toString(),
         type: 'assistant',
@@ -113,42 +132,12 @@ export default function ChatPage() {
     }
   };
 
-  const fetchCitations = async (
-    content: string,
-    caseType: string,
-    jurisdiction: string
-  ): Promise<Citation[] | null> => {
-    try {
-      // Replace with your actual API endpoint
-      const response = await fetch('/api/chat/citations', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          query: content,
-          caseType,
-          jurisdiction,
-        }),
-      });
-
-      if (!response.ok) throw new Error('Failed to fetch citations');
-
-      const data = await response.json();
-      return data.citations || [];
-    } catch (error) {
-      console.error('Error fetching citations:', error);
-      return null;
-    }
-  };
-
   const fetchLLMResponse = async (
     content: string,
     caseType: string,
     jurisdiction: string
   ): Promise<any | null> => {
     try {
-      // Replace with your actual API endpoint
       const response = await fetch('/api/chat/llm', {
         method: 'POST',
         headers: {
@@ -164,6 +153,27 @@ export default function ChatPage() {
       if (!response.ok) throw new Error('Failed to fetch LLM response');
 
       const data = await response.json();
+
+      // If backend returns structured DAO payload, compose content/explainability for UI
+      if (data && data.final_verdict) {
+        const composedContent = `Verdict: ${data.final_verdict.replaceAll('_', ' ')} (confidence ${(data.final_confidence * 100).toFixed(1)}%).\n\n${data.explanation?.conclusion ?? ''}`.trim();
+        const composedExplainability = `The DAO ensemble aggregated agent votes using confidence × weight. Winning verdict '${data.final_verdict}' achieved ${(data.final_confidence * 100).toFixed(1)}% confidence.`;
+        return {
+          content: composedContent,
+          agents: [
+            'BlackLetterStatuteAgent',
+            'PrecedentMiner',
+            'LimitationProcedureChecker',
+            "DevilsAdvocate",
+            'DraftingAgent',
+            'EthicsAgent',
+            'AggregatorAgent',
+          ],
+          explainability: composedExplainability,
+          ...data,
+        };
+      }
+
       return data;
     } catch (error) {
       console.error('Error fetching LLM response:', error);

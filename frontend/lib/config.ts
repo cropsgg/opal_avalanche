@@ -30,9 +30,9 @@ export const NETWORKS: Record<string, NetworkConfig> = {
       decimals: 18,
     },
     isPrivate: true,
-    requiresVPN: true,
+    requiresVPN: false,
   },
-  
+
   // Avalanche Fuji Testnet (Legacy/Development)
   avalanche_fuji: {
     id: 43113,
@@ -48,7 +48,7 @@ export const NETWORKS: Record<string, NetworkConfig> = {
     isPrivate: false,
     requiresVPN: false,
   },
-  
+
   // Local Development
   local: {
     id: 31337,
@@ -69,7 +69,7 @@ export const NETWORKS: Record<string, NetworkConfig> = {
 // Environment-based network selection
 export function getCurrentNetwork(): NetworkConfig {
   const networkEnv = process.env.NEXT_PUBLIC_NETWORK || 'opal_production';
-  
+
   // Default to production network
   return NETWORKS[networkEnv] || NETWORKS.opal_production;
 }
@@ -84,7 +84,7 @@ export function isCorrectNetwork(userChainId: number): boolean {
 export function getNetworkSwitchParams(networkKey: string) {
   const network = NETWORKS[networkKey];
   if (!network) return null;
-  
+
   return {
     chainId: `0x${network.id.toString(16)}`,
     chainName: network.displayName,
@@ -149,7 +149,7 @@ export const GAS_ESTIMATES = {
 export function getEstimatedCost(operation: keyof typeof GAS_ESTIMATES): string {
   const network = getCurrentNetwork();
   const gasLimit = GAS_ESTIMATES[operation];
-  
+
   if (network.id === 43210) { // OPAL Private Subnet
     const costInAvax = (gasLimit * 0.000000025); // 25 gwei base fee
     return `~${costInAvax.toFixed(6)} AVAX`;
