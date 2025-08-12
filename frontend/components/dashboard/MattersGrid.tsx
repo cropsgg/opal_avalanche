@@ -40,12 +40,16 @@ export function MattersGrid({ matters, onRefresh }: MattersGridProps) {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
+<<<<<<< HEAD
+        <h2 className="text-2xl  font-bold">Your Matters</h2>
+=======
         <h2 className="text-2xl  font-bold" style={{ color: 'orangered' }}>Your Matters</h2>
+>>>>>>> 1a29fd168724437961359413bad99020075647b4
         <Link href="/matters/new">
           <Button
             variant="outline"
             className="hover:bg-gray-50"
-            style={{ borderColor: 'orangered', color: 'orangered' }}
+            style={{ borderColor: '#000', color: '#000' }}
           >
             Create New Matter
           </Button>
@@ -56,14 +60,14 @@ export function MattersGrid({ matters, onRefresh }: MattersGridProps) {
         <Card style={{ backgroundColor: 'white', borderColor: '#D1D5DB' }} className="text-center py-12">
           <CardContent>
             <FileText className="h-12 w-12 mx-auto mb-4" style={{ color: '#9CA3AF' }} />
-            <h3 className="text-lg font-semibold mb-2" style={{ color: 'orangered' }}>No matters yet</h3>
+            <h3 className="text-lg font-medium mb-2">No matters yet</h3>
             <p className="mb-6" style={{ color: '#6B7280' }}>
               Create your first matter to start your legal research journey
             </p>
             <Link href="/matters/new">
               <Button
                 className="text-white hover:opacity-90"
-                style={{ backgroundColor: 'orangered' }}
+                style={{ backgroundColor: '#000' }}
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Create Your First Matter
@@ -82,7 +86,11 @@ export function MattersGrid({ matters, onRefresh }: MattersGridProps) {
               <CardHeader className="pb-3">
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
+<<<<<<< HEAD
+                    <h3 className="text-lg  font-medium mb-2" style={{ color: 'black' }}>
+=======
                     <h3 className="text-lg  font-semibold mb-2" style={{ color: 'orangered' }}>
+>>>>>>> 1a29fd168724437961359413bad99020075647b4
                       {matter.title}
                     </h3>
                     <div className="flex items-center gap-2 mb-2">
@@ -94,7 +102,11 @@ export function MattersGrid({ matters, onRefresh }: MattersGridProps) {
                       </Badge>
                       <Badge
                         variant="outline"
+<<<<<<< HEAD
+                        style={{ borderColor: 'black', color: 'black' }}
+=======
                         style={{ borderColor: 'orangered', color: 'orangered' }}
+>>>>>>> 1a29fd168724437961359413bad99020075647b4
                       >
                         {matter.language === 'hi' ? 'Hindi' : 'English'}
                       </Badge>
@@ -121,7 +133,7 @@ export function MattersGrid({ matters, onRefresh }: MattersGridProps) {
                 <Link href={`/matters/${matter.id}`}>
                   <Button
                     className="w-full text-white hover:opacity-90"
-                    style={{ backgroundColor: 'orangered' }}
+                    style={{ backgroundColor: '#000' }}
                   >
                     Open Matter
                   </Button>

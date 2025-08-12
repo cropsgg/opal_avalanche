@@ -14,12 +14,88 @@ import { AlertCircle, Loader2 } from "lucide-react";
 import { apiClient } from "@/lib/api";
 import type { Matter, Analytics } from "@/types";
 import { Inter, Poppins } from "next/font/google";
+<<<<<<< HEAD
+
+// --- Dummy sexy matters ---
+const now = Date.now();
+const days = (n: number) => new Date(now - n * 24 * 60 * 60 * 1000).toISOString();
+const DUMMY_MATTERS: Matter[] = [
+  {
+    id: "mat_prop_limitation_delhi",
+    user_id: "u_demo",
+    title: "Property Dispute – Limitation (Delhi HC)",
+    language: "en",
+    created_at: days(2),
+    documents_count: 12,
+    last_analysis: "DAO verdict: proceed with suit · confidence 77.3% · Sec 17(1)(b) Limitation Act",
+    status: "active",
+  },
+  {
+    id: "mat_contract_damages",
+    user_id: "u_demo",
+    title: "Contract Breach – Damages Memo",
+    language: "en",
+    created_at: days(6),
+    documents_count: 5,
+    last_analysis: "Drafted statement of claim · identified key precedents on mitigation",
+    status: "draft",
+  },
+  {
+    id: "mat_trademark_reply",
+    user_id: "u_demo",
+    title: "Trademark Opposition – Reply Draft",
+    language: "en",
+    created_at: days(15),
+    documents_count: 8,
+    last_analysis: "Pulled persuasive authorities from Bombay HC · high similarity",
+    status: "active",
+  },
+  {
+    id: "mat_condonation_civil_appeal",
+    user_id: "u_demo",
+    title: "Civil Appeal – Condonation Application",
+    language: "en",
+    created_at: days(28),
+    documents_count: 3,
+    last_analysis: "Computed delay timeline · prepared affidavit grounds",
+    status: "archived",
+  },
+  {
+    id: "mat_ni138_cheque",
+    user_id: "u_demo",
+    title: "Cheque Bounce – Sec 138 NI Act",
+    language: "hi",
+    created_at: days(9),
+    documents_count: 4,
+    last_analysis: "Compiled notices & bank memos · precedent scan complete",
+    status: "active",
+  },
+  {
+    id: "mat_lease_eviction",
+    user_id: "u_demo",
+    title: "Lease Dispute – Eviction Petition",
+    language: "en",
+    created_at: days(4),
+    documents_count: 6,
+    last_analysis: "Drafted petition skeleton · gathered rent ledger evidence",
+    status: "draft",
+  },
+];
+
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-poppins",
 });
 
+=======
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-poppins",
+});
+
+>>>>>>> 1a29fd168724437961359413bad99020075647b4
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -40,14 +116,30 @@ export default function Dashboard() {
 
   const loadDashboardData = async () => {
     try {
+<<<<<<< HEAD
+      // Load matters (dummy for now)
+      setMatters(DUMMY_MATTERS);
+=======
       // Load matters
 
+>>>>>>> 1a29fd168724437961359413bad99020075647b4
       setIsLoadingMatters(false);
 
       // Load analytics
       const analyticsResponse = await apiClient.getAnalytics();
       if (analyticsResponse.error) {
         console.warn("Failed to load analytics:", analyticsResponse.error);
+<<<<<<< HEAD
+        // Seed dummy analytics if backend not ready
+        setAnalytics({
+          total_queries: 42,
+          total_documents: DUMMY_MATTERS.reduce((a, m) => a + (m.documents_count || 0), 0),
+          avg_confidence: 0.912,
+          credits_used: 73,
+          recent_activity: [],
+        } as Analytics);
+=======
+>>>>>>> 1a29fd168724437961359413bad99020075647b4
       } else if (analyticsResponse.data) {
         setAnalytics(analyticsResponse.data);
       }
@@ -98,15 +190,26 @@ export default function Dashboard() {
   }
 
   return (
+<<<<<<< HEAD
+    <div
+      className={`${poppins.className} min-h-screen`}
+      style={{ backgroundColor: "#EFEAE3" }}
+    >
+=======
     <div className={`${poppins.className} min-h-screen`} style={{ backgroundColor: "#EFEAE3" }}>
+>>>>>>> 1a29fd168724437961359413bad99020075647b4
       <DashboardHeader />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-8">
           {/* Welcome Section */}
           <div className="mb-8">
+<<<<<<< HEAD
+            <h1 className="text-3xl font-bold mb-2">
+=======
             <h1
               className="text-3xl font-bold mb-2"
             >
+>>>>>>> 1a29fd168724437961359413bad99020075647b4
               Welcome back,{" "}
               {user.firstName || user.emailAddresses[0]?.emailAddress}
             </h1>
@@ -141,7 +244,11 @@ export default function Dashboard() {
                   style={{ backgroundColor: "white", borderColor: "#E5E7EB" }}
                 >
                   <CardHeader>
+<<<<<<< HEAD
+                    <CardTitle className="font-poppins !text-[#000]">
+=======
                     <CardTitle  className="font-poppins text-black">
+>>>>>>> 1a29fd168724437961359413bad99020075647b4
                       Your Matters
                     </CardTitle>
                   </CardHeader>
@@ -180,7 +287,11 @@ export default function Dashboard() {
                 style={{ backgroundColor: "white", borderColor: "#E5E7EB" }}
               >
                 <CardHeader>
+<<<<<<< HEAD
+                  <CardTitle className="text-lg text-[#000]">
+=======
                   <CardTitle className="text-lg" style={{ color: "orangered" }}>
+>>>>>>> 1a29fd168724437961359413bad99020075647b4
                     Quick Stats
                   </CardTitle>
                 </CardHeader>
@@ -189,10 +300,14 @@ export default function Dashboard() {
                     <span className="text-sm text-muted-foreground">
                       Total Matters
                     </span>
+<<<<<<< HEAD
+                    <span className="font-semibold" style={{ color: "#000" }}>
+=======
                     <span
                       className="font-semibold"
                       style={{ color: "orangered" }}
                     >
+>>>>>>> 1a29fd168724437961359413bad99020075647b4
                       {matters.length}
                     </span>
                   </div>
@@ -200,35 +315,49 @@ export default function Dashboard() {
                     <span className="text-sm text-muted-foreground">
                       Documents Processed
                     </span>
+<<<<<<< HEAD
+                    <span className="font-semibold" style={{ color: "#000" }}>
+                      {analytics?.total_documents || DUMMY_MATTERS.reduce((a, m) => a + (m.documents_count || 0), 0)}
+=======
                     <span
                       className="font-semibold"
                       style={{ color: "orangered" }}
                     >
                       {analytics?.total_documents || 0}
+>>>>>>> 1a29fd168724437961359413bad99020075647b4
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">
                       Queries Made
                     </span>
+<<<<<<< HEAD
+                    <span className="font-semibold" style={{ color: "#000" }}>
+                      {analytics?.total_queries || 42}
+=======
                     <span
                       className="font-semibold"
                       style={{ color: "orangered" }}
                     >
                       {analytics?.total_queries || 0}
+>>>>>>> 1a29fd168724437961359413bad99020075647b4
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">
                       Avg. Confidence
                     </span>
+<<<<<<< HEAD
+                    <span className="font-semibold" style={{ color: "#000" }}>
+=======
                     <span
                       className="font-semibold"
                       style={{ color: "orangered" }}
                     >
+>>>>>>> 1a29fd168724437961359413bad99020075647b4
                       {analytics?.avg_confidence
                         ? `${(analytics.avg_confidence * 100).toFixed(1)}%`
-                        : "N/A"}
+                        : "91.2%"}
                     </span>
                   </div>
                 </CardContent>

@@ -1,6 +1,10 @@
 "use client";
 
+<<<<<<< HEAD
+import { useState } from "react";
+=======
 import { useState, useEffect } from "react";
+>>>>>>> 1a29fd168724437961359413bad99020075647b4
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,8 +22,12 @@ interface ChatInputProps {
   isLoading: boolean;
 }
 
+<<<<<<< HEAD
+const CASE_TYPES = [
+=======
 // Fallback case types in case API is unavailable
 const FALLBACK_CASE_TYPES = [
+>>>>>>> 1a29fd168724437961359413bad99020075647b4
   "Criminal Law",
   "Civil Rights",
   "Contract Law",
@@ -34,6 +42,8 @@ const FALLBACK_CASE_TYPES = [
   "Environmental Law",
 ];
 
+<<<<<<< HEAD
+=======
 const FALLBACK_JURISDICTIONS = [
   "Federal",
   "California",
@@ -49,10 +59,13 @@ const FALLBACK_JURISDICTIONS = [
   "New Jersey",
 ];
 
+>>>>>>> 1a29fd168724437961359413bad99020075647b4
 export function ChatInput({ onSendMessage, isLoading }: ChatInputProps) {
   const [caseType, setCaseType] = useState("");
   const [jurisdiction, setJurisdiction] = useState("");
   const [prompt, setPrompt] = useState("");
+<<<<<<< HEAD
+=======
   const [caseTypes, setCaseTypes] = useState<string[]>(FALLBACK_CASE_TYPES);
   const [jurisdictions, setJurisdictions] = useState<string[]>(FALLBACK_JURISDICTIONS);
   const [loadingOptions, setLoadingOptions] = useState(true);
@@ -84,6 +97,7 @@ export function ChatInput({ onSendMessage, isLoading }: ChatInputProps) {
 
     loadOptions();
   }, []);
+>>>>>>> 1a29fd168724437961359413bad99020075647b4
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,7 +120,11 @@ export function ChatInput({ onSendMessage, isLoading }: ChatInputProps) {
               <SelectValue placeholder="Select case type" />
             </SelectTrigger>
             <SelectContent className="bg-white border-gray-300">
+<<<<<<< HEAD
+              {CASE_TYPES.map((type) => (
+=======
               {caseTypes.map((type) => (
+>>>>>>> 1a29fd168724437961359413bad99020075647b4
                 <SelectItem
                   key={type}
                   value={type}
@@ -120,6 +138,14 @@ export function ChatInput({ onSendMessage, isLoading }: ChatInputProps) {
         </div>
 
         <div className="w-1/2">
+<<<<<<< HEAD
+          <Input
+            placeholder="Jurisdiction (e.g., New York, NY)"
+            value={jurisdiction}
+            onChange={(e) => setJurisdiction(e.target.value)}
+            className="bg-white border-gray-300 text-black placeholder:text-gray-500"
+          />
+=======
           <Select value={jurisdiction} onValueChange={setJurisdiction}>
             <SelectTrigger className="bg-white border-gray-300 text-black">
               <SelectValue placeholder="Select jurisdiction" />
@@ -136,6 +162,7 @@ export function ChatInput({ onSendMessage, isLoading }: ChatInputProps) {
               ))}
             </SelectContent>
           </Select>
+>>>>>>> 1a29fd168724437961359413bad99020075647b4
         </div>
       </div>
 

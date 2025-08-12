@@ -80,7 +80,11 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
         setDocuments(documentsResponse.data);
 
         // Check if any documents are still processing
+<<<<<<< HEAD
+        const hasProcessingDocs = documentsResponse.data.some(doc =>
+=======
         const hasProcessingDocs = documentsResponse.data.length > 0 && documentsResponse.data.some((doc: any) =>
+>>>>>>> 1a29fd168724437961359413bad99020075647b4
           doc.ocr_status === 'processing' || doc.ocr_status === 'pending'
         );
         if (hasProcessingDocs && !isNewlyCreated) {
