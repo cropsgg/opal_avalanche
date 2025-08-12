@@ -3,14 +3,24 @@
 import { useState } from "react";
 import { Calendar, Filter, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
 
 export interface SearchFilters {
-  type?: 'case' | 'statute' | 'document' | 'precedent';
+  type?: "case" | "statute" | "document" | "precedent";
   date_from?: string;
   date_to?: string;
   limit?: number;
@@ -26,7 +36,7 @@ interface SearchFiltersProps {
 export function SearchFiltersComponent({
   filters,
   onFiltersChange,
-  onApplyFilters
+  onApplyFilters,
 }: SearchFiltersProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -41,15 +51,17 @@ export function SearchFiltersComponent({
     onFiltersChange({});
   };
 
-  const hasActiveFilters = Object.keys(filters).some(key =>
-    filters[key as keyof SearchFilters] !== undefined &&
-    filters[key as keyof SearchFilters] !== ''
+  const hasActiveFilters = Object.keys(filters).some(
+    (key) =>
+      filters[key as keyof SearchFilters] !== undefined &&
+      filters[key as keyof SearchFilters] !== ""
   );
 
   const getActiveFiltersCount = () => {
-    return Object.keys(filters).filter(key =>
-      filters[key as keyof SearchFilters] !== undefined &&
-      filters[key as keyof SearchFilters] !== ''
+    return Object.keys(filters).filter(
+      (key) =>
+        filters[key as keyof SearchFilters] !== undefined &&
+        filters[key as keyof SearchFilters] !== ""
     ).length;
   };
 
@@ -90,8 +102,8 @@ export function SearchFiltersComponent({
             <div className="space-y-2">
               <Label>Document Type</Label>
               <Select
-                value={filters.type || ''}
-                onValueChange={(value) => handleFilterChange('type', value)}
+                value={filters.type || ""}
+                onValueChange={(value) => handleFilterChange("type", value)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="All types" />
@@ -117,8 +129,10 @@ export function SearchFiltersComponent({
                   <Input
                     id="date-from"
                     type="date"
-                    value={filters.date_from || ''}
-                    onChange={(e) => handleFilterChange('date_from', e.target.value)}
+                    value={filters.date_from || ""}
+                    onChange={(e) =>
+                      handleFilterChange("date_from", e.target.value)
+                    }
                   />
                 </div>
                 <div>
@@ -128,8 +142,10 @@ export function SearchFiltersComponent({
                   <Input
                     id="date-to"
                     type="date"
-                    value={filters.date_to || ''}
-                    onChange={(e) => handleFilterChange('date_to', e.target.value)}
+                    value={filters.date_to || ""}
+                    onChange={(e) =>
+                      handleFilterChange("date_to", e.target.value)
+                    }
                   />
                 </div>
               </div>
@@ -139,8 +155,10 @@ export function SearchFiltersComponent({
             <div className="space-y-2">
               <Label>Results per page</Label>
               <Select
-                value={filters.limit?.toString() || '20'}
-                onValueChange={(value) => handleFilterChange('limit', parseInt(value))}
+                value={filters.limit?.toString() || "20"}
+                onValueChange={(value) =>
+                  handleFilterChange("limit", parseInt(value))
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -160,11 +178,7 @@ export function SearchFiltersComponent({
                   onApplyFilters();
                   setIsOpen(false);
                 }}
-<<<<<<< HEAD
                 className="flex-1 bg-black hover:bg-black/90 text-white"
-=======
-                className="flex-1 bg-brown-700 hover:bg-brown-600 text-cream-100"
->>>>>>> 1a29fd168724437961359413bad99020075647b4
               >
                 Apply Filters
               </Button>
@@ -181,7 +195,7 @@ export function SearchFiltersComponent({
               Type: {filters.type}
               <X
                 className="h-3 w-3 cursor-pointer"
-                onClick={() => handleFilterChange('type', undefined)}
+                onClick={() => handleFilterChange("type", undefined)}
               />
             </Badge>
           )}
@@ -190,7 +204,7 @@ export function SearchFiltersComponent({
               From: {new Date(filters.date_from).toLocaleDateString()}
               <X
                 className="h-3 w-3 cursor-pointer"
-                onClick={() => handleFilterChange('date_from', undefined)}
+                onClick={() => handleFilterChange("date_from", undefined)}
               />
             </Badge>
           )}
@@ -199,7 +213,7 @@ export function SearchFiltersComponent({
               To: {new Date(filters.date_to).toLocaleDateString()}
               <X
                 className="h-3 w-3 cursor-pointer"
-                onClick={() => handleFilterChange('date_to', undefined)}
+                onClick={() => handleFilterChange("date_to", undefined)}
               />
             </Badge>
           )}
@@ -208,7 +222,7 @@ export function SearchFiltersComponent({
               Limit: {filters.limit}
               <X
                 className="h-3 w-3 cursor-pointer"
-                onClick={() => handleFilterChange('limit', undefined)}
+                onClick={() => handleFilterChange("limit", undefined)}
               />
             </Badge>
           )}

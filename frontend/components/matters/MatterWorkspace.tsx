@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useUser } from '@clerk/nextjs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Skeleton } from '@/components/ui/skeleton';
-import { ChatInterface } from './ChatInterface';
-import { DocumentViewer } from './DocumentViewer';
-import { EvidencePanel } from './EvidencePanel';
-import { SubnetNotarization } from './SubnetNotarization';
+import { useState, useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ChatInterface } from "./ChatInterface";
+import { DocumentViewer } from "./DocumentViewer";
+import { EvidencePanel } from "./EvidencePanel";
+import { SubnetNotarization } from "./SubnetNotarization";
 // import { DocumentUploader } from './DocumentUploader';
 import {
   MessageSquare,
@@ -23,19 +23,22 @@ import {
   Clock,
   AlertCircle,
   Loader2,
-  ArrowLeft
-} from 'lucide-react';
-import Link from 'next/link';
-import { apiClient } from '@/lib/api';
-import { useToast } from '@/hooks/use-toast';
-import type { Matter, Document, EvidenceItem } from '@/types';
+  ArrowLeft,
+} from "lucide-react";
+import Link from "next/link";
+import { apiClient } from "@/lib/api";
+import { useToast } from "@/hooks/use-toast";
+import type { Matter, Document, EvidenceItem } from "@/types";
 
 interface MatterWorkspaceProps {
   matterId: string;
   isNewlyCreated?: boolean;
 }
 
-export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspaceProps) {
+export function MatterWorkspace({
+  matterId,
+  isNewlyCreated,
+}: MatterWorkspaceProps) {
   const { user, isLoaded } = useUser();
   const { toast } = useToast();
   const [matter, setMatter] = useState<Matter | null>(null);
@@ -43,8 +46,10 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
   const [isLoadingMatter, setIsLoadingMatter] = useState(true);
   const [isLoadingDocuments, setIsLoadingDocuments] = useState(true);
   const [isProcessing, setIsProcessing] = useState(isNewlyCreated);
-  const [selectedEvidence, setSelectedEvidence] = useState<EvidenceItem | null>(null);
-  const [activeTab, setActiveTab] = useState('chat');
+  const [selectedEvidence, setSelectedEvidence] = useState<EvidenceItem | null>(
+    null
+  );
+  const [activeTab, setActiveTab] = useState("chat");
   const [error, setError] = useState<string | null>(null);
   const [currentRunId, setCurrentRunId] = useState<string | null>(null);
   const [isNotarized, setIsNotarized] = useState(false);
@@ -80,12 +85,10 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
         setDocuments(documentsResponse.data);
 
         // Check if any documents are still processing
-<<<<<<< HEAD
-        const hasProcessingDocs = documentsResponse.data.some(doc =>
-=======
-        const hasProcessingDocs = documentsResponse.data.length > 0 && documentsResponse.data.some((doc: any) =>
->>>>>>> 1a29fd168724437961359413bad99020075647b4
-          doc.ocr_status === 'processing' || doc.ocr_status === 'pending'
+
+        const hasProcessingDocs = documentsResponse.data.some(
+          (doc) =>
+            doc.ocr_status === "processing" || doc.ocr_status === "pending"
         );
         if (hasProcessingDocs && !isNewlyCreated) {
           setIsProcessing(true);
@@ -94,8 +97,10 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
             const updatedDocs = await apiClient.getDocuments(matterId);
             if (updatedDocs.data) {
               setDocuments(updatedDocs.data);
-              const stillProcessing = updatedDocs.data.some(doc =>
-                doc.ocr_status === 'processing' || doc.ocr_status === 'pending'
+              const stillProcessing = updatedDocs.data.some(
+                (doc) =>
+                  doc.ocr_status === "processing" ||
+                  doc.ocr_status === "pending"
               );
               if (!stillProcessing) {
                 setIsProcessing(false);
@@ -110,8 +115,8 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
       }
       setIsLoadingDocuments(false);
     } catch (err) {
-      console.error('Failed to load matter data:', err);
-      setError('Failed to load matter data');
+      console.error("Failed to load matter data:", err);
+      setError("Failed to load matter data");
       setIsLoadingMatter(false);
       setIsLoadingDocuments(false);
     }
@@ -135,7 +140,9 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
       <div className="min-h-screen bg-cream-50 flex items-center justify-center">
         <Card className="w-96">
           <CardHeader>
-            <CardTitle className="text-center">Authentication Required</CardTitle>
+            <CardTitle className="text-center">
+              Authentication Required
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-center text-muted-foreground">
@@ -173,7 +180,10 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="mb-8">
             <Link href="/dashboard">
-              <Button variant="ghost" className="mb-4 text-brown-600 hover:text-brown-800">
+              <Button
+                variant="ghost"
+                className="mb-4 text-brown-600 hover:text-brown-800"
+              >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Dashboard
               </Button>
@@ -182,7 +192,7 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
-              {error || 'Matter not found. Please check the URL and try again.'}
+              {error || "Matter not found. Please check the URL and try again."}
             </AlertDescription>
           </Alert>
         </div>
@@ -195,7 +205,10 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
       {/* Back Navigation */}
       <div className="mb-6">
         <Link href="/dashboard">
-          <Button variant="ghost" className="text-brown-600 hover:text-brown-800">
+          <Button
+            variant="ghost"
+            className="text-brown-600 hover:text-brown-800"
+          >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Dashboard
           </Button>
@@ -211,10 +224,13 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
             </h1>
             <div className="flex items-center gap-4">
               <Badge className="bg-olive-400 text-cream-100">
-                {matter.status || 'active'}
+                {matter.status || "active"}
               </Badge>
-              <Badge variant="outline" className="border-brown-500 text-brown-700">
-                {matter.language === 'hi' ? 'Hindi' : 'English'}
+              <Badge
+                variant="outline"
+                className="border-brown-500 text-brown-700"
+              >
+                {matter.language === "hi" ? "Hindi" : "English"}
               </Badge>
               <span className="text-sm text-brown-500 flex items-center gap-1">
                 <FileText className="h-4 w-4" />
@@ -224,11 +240,17 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
           </div>
 
           <div className="flex items-center gap-2">
-            <Button variant="outline" className="border-brown-700 text-brown-700">
+            <Button
+              variant="outline"
+              className="border-brown-700 text-brown-700"
+            >
               <Download className="h-4 w-4 mr-2" />
               Export
             </Button>
-            <Button variant="outline" className="border-brown-700 text-brown-700">
+            <Button
+              variant="outline"
+              className="border-brown-700 text-brown-700"
+            >
               <Share2 className="h-4 w-4 mr-2" />
               Share
             </Button>
@@ -261,11 +283,17 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
         <div className="lg:col-span-2 space-y-6">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid w-full grid-cols-2 bg-cream-100">
-              <TabsTrigger value="chat" className="data-[state=active]:bg-brown-700 data-[state=active]:text-cream-100">
+              <TabsTrigger
+                value="chat"
+                className="data-[state=active]:bg-brown-700 data-[state=active]:text-cream-100"
+              >
                 <MessageSquare className="h-4 w-4 mr-2" />
                 Chat Workspace
               </TabsTrigger>
-              <TabsTrigger value="documents" className="data-[state=active]:bg-brown-700 data-[state=active]:text-cream-100">
+              <TabsTrigger
+                value="documents"
+                className="data-[state=active]:bg-brown-700 data-[state=active]:text-cream-100"
+              >
                 <FileText className="h-4 w-4 mr-2" />
                 Documents
               </TabsTrigger>
@@ -298,9 +326,7 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
                       <p className="text-brown-600 mb-4">
                         Upload legal documents related to this matter
                       </p>
-                      <Button variant="outline">
-                        Select Files
-                      </Button>
+                      <Button variant="outline">Select Files</Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -319,7 +345,7 @@ export function MatterWorkspace({ matterId, isNewlyCreated }: MatterWorkspacePro
           <EvidencePanel
             evidence={selectedEvidence}
             onDocumentJump={(docId, paragraph) => {
-              setActiveTab('documents');
+              setActiveTab("documents");
               // Implement document jump logic
             }}
           />

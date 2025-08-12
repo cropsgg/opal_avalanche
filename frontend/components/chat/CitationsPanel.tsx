@@ -1,14 +1,10 @@
 "use client";
 
-<<<<<<< HEAD
-=======
-import { Citation } from "@/app/chat/page";
->>>>>>> 1a29fd168724437961359413bad99020075647b4
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
-<<<<<<< HEAD
+
 import { useMemo } from "react";
 
 // Define the Citation type used in this component
@@ -50,15 +46,6 @@ export function CitationsPanel({ citations }: CitationsPanelProps) {
   const sortedCitations = normalized.sort(
     (a, b) => (b.relevanceScore || 0) - (a.relevanceScore || 0)
   );
-=======
-
-interface CitationsPanelProps {
-  citations: Citation[];
-}
-
-export function CitationsPanel({ citations }: CitationsPanelProps) {
-  const sortedCitations = citations.sort((a, b) => b.relevanceScore - a.relevanceScore);
->>>>>>> 1a29fd168724437961359413bad99020075647b4
 
   return (
     <div className="h-full bg-gray-50 border-l border-gray-200">
@@ -67,21 +54,15 @@ export function CitationsPanel({ citations }: CitationsPanelProps) {
           <FileText className="w-5 h-5 mr-2" />
           Citations
         </h2>
-<<<<<<< HEAD
+
         {sortedCitations.length > 0 && (
           <p className="text-sm text-gray-600 mt-1">
             {sortedCitations.length} relevant sources found
-=======
-        {citations.length > 0 && (
-          <p className="text-sm text-gray-600 mt-1">
-            {citations.length} relevant sources found
->>>>>>> 1a29fd168724437961359413bad99020075647b4
           </p>
         )}
       </div>
 
       <div className="overflow-y-auto h-[calc(100%-80px)] p-4">
-<<<<<<< HEAD
         {sortedCitations.length === 0 ? (
           <div className="flex items-center justify-center h-full text-gray-500">
             <div className="text-center">
@@ -89,13 +70,6 @@ export function CitationsPanel({ citations }: CitationsPanelProps) {
               <p className="text-sm">
                 Citations will appear here when you ask a question
               </p>
-=======
-        {citations.length === 0 ? (
-          <div className="flex items-center justify-center h-full text-gray-500">
-            <div className="text-center">
-              <FileText className="w-12 h-12 mx-auto mb-2 opacity-50" />
-              <p className="text-sm">Citations will appear here when you ask a question</p>
->>>>>>> 1a29fd168724437961359413bad99020075647b4
             </div>
           </div>
         ) : (
@@ -112,7 +86,6 @@ export function CitationsPanel({ citations }: CitationsPanelProps) {
 
 function CitationCard({ citation }: { citation: Citation }) {
   const relevanceColor =
-<<<<<<< HEAD
     (citation.relevanceScore ?? 0) >= 0.8
       ? "bg-green-100 text-green-800"
       : (citation.relevanceScore ?? 0) >= 0.6
@@ -125,15 +98,6 @@ function CitationCard({ citation }: { citation: Citation }) {
       : (citation.relevanceScore ?? 0) >= 0.6
       ? "Medium"
       : "Low";
-=======
-    citation.relevanceScore >= 0.8 ? "bg-green-100 text-green-800" :
-    citation.relevanceScore >= 0.6 ? "bg-yellow-100 text-yellow-800" :
-    "bg-red-100 text-red-800";
-
-  const relevanceLabel =
-    citation.relevanceScore >= 0.8 ? "High" :
-    citation.relevanceScore >= 0.6 ? "Medium" : "Low";
->>>>>>> 1a29fd168724437961359413bad99020075647b4
 
   return (
     <Card className="bg-white border-gray-200 hover:shadow-md transition-shadow">
@@ -159,17 +123,12 @@ function CitationCard({ citation }: { citation: Citation }) {
             {relevanceLabel} Relevance
           </Badge>
           <span className="text-xs text-gray-500">
-<<<<<<< HEAD
             {Math.round((citation.relevanceScore ?? 0) * 100)}%
-=======
-            {Math.round(citation.relevanceScore * 100)}%
->>>>>>> 1a29fd168724437961359413bad99020075647b4
           </span>
         </div>
       </CardHeader>
 
       <CardContent className="pt-0">
-<<<<<<< HEAD
         {citation.source && (
           <p className="text-xs text-gray-600 font-medium">
             Source: {citation.source}
@@ -180,17 +139,6 @@ function CitationCard({ citation }: { citation: Citation }) {
             "{citation.excerpt}"
           </blockquote>
         )}
-=======
-        <div className="space-y-2">
-          <p className="text-xs text-gray-600 font-medium">
-            Source: {citation.source}
-          </p>
-
-          <blockquote className="text-sm text-gray-700 italic border-l-2 border-gray-300 pl-3">
-            "{citation.excerpt}"
-          </blockquote>
-        </div>
->>>>>>> 1a29fd168724437961359413bad99020075647b4
       </CardContent>
     </Card>
   );

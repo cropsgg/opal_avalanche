@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-<<<<<<< HEAD
-=======
+
+
 import { apiClient } from "@/lib/api";
->>>>>>> 1a29fd168724437961359413bad99020075647b4
+
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-<<<<<<< HEAD
+
     const { query, caseType, jurisdiction } = body;
 
     // Mock citations data for now - replace with your actual API logic
@@ -46,50 +46,6 @@ export async function POST(request: NextRequest) {
       query,
       caseType,
       jurisdiction
-=======
-    const { query, caseType, jurisdiction, matterId } = body;
-
-    if (!matterId) {
-      return NextResponse.json(
-        { error: "Matter ID is required" },
-        { status: 400 }
-      );
-    }
-
-    // Send chat message to FastAPI backend
-    const response = await apiClient.sendChatMessage({
-      matter_id: matterId,
-      message: query,
-      case_type: caseType,
-      jurisdiction_region: jurisdiction,
-    });
-
-    if (response.error) {
-      return NextResponse.json(
-        { error: response.error },
-        { status: response.status }
-      );
-    }
-
-    // Extract citations from the backend response
-    const citations = response.data?.citations || [];
-    
-    return NextResponse.json({
-      citations: citations.map((citation: any) => ({
-        id: citation.authority_id,
-        title: citation.title || citation.cite,
-        source: citation.court,
-        excerpt: citation.neutral_cite || citation.reporter_cite || '',
-        relevanceScore: 0.85, // Default score since not provided
-        url: `#citation-${citation.authority_id}`,
-        cite: citation.cite,
-        para_ids: citation.para_ids
-      })),
-      query,
-      caseType,
-      jurisdiction,
-      runId: response.data?.run_id
->>>>>>> 1a29fd168724437961359413bad99020075647b4
     });
 
   } catch (error) {
