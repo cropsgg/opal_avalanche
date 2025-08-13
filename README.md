@@ -33,6 +33,7 @@ The platform leverages a sophisticated **DAO of Agents** architecture where mult
 - **Devil's Advocate Agent** – Challenges arguments and identifies weaknesses
 - **Ethics Agent** – Ensures professional conduct and ethical compliance
 - **Drafting Agent** – Assists with legal document preparation
+  
 
 ### 🗳️ **Democratic Voting Mechanism**
 - **Confidence-Weighted Voting** – Agents vote based on confidence levels
