@@ -161,6 +161,7 @@ body {
 nav {
   width: 100%;
   z-index: 100;
+  max-height: 90px;
   padding: 2vw 0vw;
   display: flex;
   align-items: center;
@@ -520,7 +521,7 @@ nav h3 {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: flex-start;
+  justify-content: center;
   padding-left: 34px !important;
   gap: 2rem;
 }
@@ -687,7 +688,9 @@ nav h3 {
     padding: 0 0vw;
     min-height: 100vh;
   }
-
+  .overlay{
+    display: none ;
+  }
   nav {
     padding: 8vw 5vw;
     background-color: #EFEAE3;
@@ -699,6 +702,10 @@ nav h3 {
   }
 
   #nav-part2 {
+    display: none;
+  }
+
+  .lady-img {
     display: none;
   }
 
