@@ -15,6 +15,7 @@
   font-weight: 200;
   src: url(./assets/Fonts/NeueHaasDisplayRoman.ttf);
 }
+
 .macbook {
   padding: 4% 6%;
   margin: 0 auto;
@@ -130,6 +131,7 @@
   right: 0;
   top: 0;
 }
+
 * {
   margin: 0;
   padding: 0;
@@ -518,7 +520,7 @@ nav h3 {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
   padding-left: 34px !important;
   gap: 2rem;
 }
