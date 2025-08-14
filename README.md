@@ -579,19 +579,7 @@ We welcome contributions from the legal tech community! Here's how to get starte
 
 ---
 
-## 📞 Support & Community
 
-### Getting Help
-- **📖 Documentation** – Comprehensive guides and API docs
-- **💬 Discord** – [Join our community](https://discord.gg/opal)
-- **📧 Email** – support@opal.law
-- **🐛 Issues** – GitHub Issues for bugs and feature requests
-
-### Community Resources
-- **🎓 Legal Tech Blog** – [blog.opal.law](https://blog.opal.law)
-- **📺 YouTube** – Video tutorials and demos
-- **📱 Twitter** – [@OpalLegalAI](https://twitter.com/OpalLegalAI)
-- **💼 LinkedIn** – Professional updates and insights
 
 ---
 
