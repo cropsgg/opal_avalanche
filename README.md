@@ -1,8 +1,8 @@
-# ⚖️ OPAL – Avalanche Subnet GenAI Legal Co-Counsel for India
+# Opal – Avalanche Subnet GenAI Legal Co-Counsel for India
 
 <div align="center">
   <img src="./frontend/public/logo.png" alt="OPAL Logo" width="200" height="200" />
-  <span style="font-size: 48px; margin: 0 20px; vertical-align: middle; color: #666;">X</span>
+  <span style="font-size: 48px; margin: 0 20px; vertical-align: middle; color: #666;"></span>
   <img src="https://github.com/cropsgg/ignition-logo/blob/master/Avalanche_Blockchain_Logo.webp?raw=true" alt="Avalanche Logo" width="200" height="200" />
   
   **Empowering Indian lawyers with AI & Blockchain – Trust, Transparency, Compliance.**
@@ -14,18 +14,47 @@
   
 </div>
 
+<img src="frontend/public/images/Screenshot 2025-08-10 134930.png" alt="OPAL System Architecture" width="1200"/>
 
-
-## 🎯 Overview
+## Overview
 
 **OPAL** (Open-Source Private AI for Law) is a next-generation GenAI-powered legal co-counsel platform, purpose-built for Indian lawyers. It combines advanced multi-agent AI reasoning, hybrid legal research, and blockchain notarization on a custom Avalanche Subnet for trust, transparency, and compliance with Indian legal standards.
 
 The platform leverages a sophisticated **DAO of Agents** architecture where multiple specialized AI agents collaborate through a democratic voting mechanism to provide comprehensive legal analysis, ensuring accuracy and reducing hallucination through collective intelligence.
 
+## DAO of Agents: Multi-Agent Architecture
 
-## ✨ Key Features
+### Agent Specialization
 
-### 🤖 **Multi-Agent Legal AI System (DAO of Agents)**
+<div align="center">
+<table>
+<tr>
+<td align="center"><img src="./frontend/public/agents/Kal.png" width="80"/><br/><strong>Statute Agent</strong><br/>Legal Frameworks</td>
+<td align="center"><img src="./frontend/public/agents/Niya.png" width="80"/><br/><strong>Precedent Agent</strong><br/>Case Law Analysis</td>
+<td align="center"><img src="./frontend/public/agents/lekh.png" width="80"/><br/><strong>Limitation Agent</strong><br/>Time Limitations</td>
+<td align="center"><img src="./frontend/public/agents/Viro.png" width="80"/><br/><strong>Risk Agent</strong><br/>Legal Risk Assessment</td>
+</tr>
+<tr>
+<td align="center"><img src="./frontend/public/agents/Shuk.png" width="80"/><br/><strong>Devil's Advocate</strong><br/>Argument Challenges</td>
+<td align="center"><img src="./frontend/public/agents/Nyas.png" width="80"/><br/><strong>Ethics Agent</strong><br/>Professional Conduct</td>
+<td align="center"><img src="./frontend/public/agents/Yoj.png" width="80"/><br/><strong>Drafting Agent</strong><br/>Document Preparation</td>
+<td align="center"><strong>🗳️</strong><br/><strong>Aggregator</strong><br/>Democratic Voting</td>
+</tr>
+</table>
+</div>
+
+## Demonstration
+
+<img src="frontend/public/images/Screenshot 2025-08-10 135342.png" alt="OPAL System Architecture" width="1200"/>
+<img src="frontend/public/images/Screenshot 2025-08-10 135640.png" alt="OPAL System Architecture" width="1200"/>
+<img src="frontend/public/images/Screenshot 2025-08-10 135704.png" alt="OPAL System Architecture" width="1200"/>
+<img src="frontend/public/images/Screenshot 2025-08-10 135716.png" alt="OPAL System Architecture" width="1200"/>
+<img src="frontend/public/images/Screenshot 2025-08-10 135729.png" alt="OPAL System Architecture" width="1200"/>
+
+
+## Key Features
+
+### **Multi-Agent Legal AI System (DAO of Agents)**
 - **Statute Agent** – Analyzes statutory provisions and legal frameworks
 - **Precedent Agent** – Examines case law and judicial precedents
 - **Limitation Agent** – Checks time limitations and procedural deadlines
@@ -35,38 +64,38 @@ The platform leverages a sophisticated **DAO of Agents** architecture where mult
 - **Drafting Agent** – Assists with legal document preparation
   
 
-### 🗳️ **Democratic Voting Mechanism**
+### **Democratic Voting Mechanism**
 - **Confidence-Weighted Voting** – Agents vote based on confidence levels
 - **Multiplicative Weight Updates (MWU)** – Dynamic weight adjustment based on performance
 - **Subdomain Specialization** – Different agent weights for different legal areas
 - **Alignment Detection** – Identifies consensus among agents for reliability
 
-### 🔍 **Hybrid Legal Research Engine**
+### **Hybrid Legal Research Engine**
 - **Semantic Search** – Qdrant vector database for contextual legal research
 - **Keyword Search** – PostgreSQL full-text search for precise term matching
 - **Citation Verification** – Automatic legal citation extraction and validation
 - **Multi-Court Filtering** – Supreme Court, High Courts, and Tribunal decisions
 
-### 📜 **Avalanche Subnet Integration**
+### **Avalanche Subnet Integration**
 - **Immutable Notarization** – Merkle root storage for tamper-proof verification
 - **Smart Contracts** – Solidity contracts for transparent operations
 - **Encrypted Evidence Storage** – AES-GCM encrypted audit trails
 - **Gas-Free Operations** – Server covers all blockchain transaction costs
 
-### 🔐 **Enterprise-Grade Security**
+### **Enterprise-Grade Security**
 - **End-to-End AES-256 Encryption** – Envelope encryption for sensitive data
 - **Automatic PII Detection & Redaction** – GDPR/DPDP 2023 compliance
 - **Row Level Security** – Multi-tenant data isolation
 - **Crypto-Shredding** – Secure data deletion for privacy compliance
 - **Audit Trails** – Immutable logging of all operations
 
-### 📊 **Compliance & Auditability**
+### **Compliance & Auditability**
 - **DPDP 2023 Compliance** – Full compliance with Indian data protection laws
 - **Cryptographic Anchoring** – Every AI output anchored on-chain
 - **Data Retention Policies** – Automated data lifecycle management
 - **Export Capabilities** – PDF/DOCX report generation with citations
 
-## 🏗️ System Architecture
+## System Architecture
 
 <div align="center">
 <img src="./frontend/public/architecture.jpeg" alt="OPAL System Architecture" width="1200"/>
@@ -110,18 +139,18 @@ The OPAL platform follows a microservices architecture with the following key co
 - **Data Retention** – Automated lifecycle management
 - **Audit Logging** – Comprehensive compliance tracking
 
-## 🔗 Avalanche Subnet Integration
+## Avalanche Subnet Integration
 
 ### Why Avalanche Subnet?
 
 OPAL operates on a **custom Avalanche subnet** specifically designed for legal research notarization and compliance:
 
-- **🏛️ Custom Blockchain** – Tailored for legal research notarization & evidence storage
-- **📜 Smart Contracts** – Immutable proofs & encrypted evidence with zero gas fees
-- **🔍 Transparency** – Every AI output cryptographically anchored on-chain
-- **⚖️ Compliance** – Supports comprehensive audit trails for Indian legal standards
-- **🚀 Performance** – Sub-second finality with high throughput
-- **💰 Cost-Effective** – Predictable costs with server-covered transaction fees
+- **Custom Blockchain** – Tailored for legal research notarization & evidence storage
+- **Smart Contracts** – Immutable proofs & encrypted evidence with zero gas fees
+- **Transparency** – Every AI output cryptographically anchored on-chain
+- **⚖Compliance** – Supports comprehensive audit trails for Indian legal standards
+- **Performance** – Sub-second finality with high throughput
+- **Cost-Effective** – Predictable costs with server-covered transaction fees
 
 ### Smart Contract Architecture
 
@@ -173,27 +202,6 @@ contract ProjectRegistry {
 
 ---
 
-## 🤖 DAO of Agents: Multi-Agent Architecture
-
-### Agent Specialization
-
-<div align="center">
-<table>
-<tr>
-<td align="center"><img src="./frontend/public/agents/Kal.png" width="80"/><br/><strong>Statute Agent</strong><br/>Legal Frameworks</td>
-<td align="center"><img src="./frontend/public/agents/Niya.png" width="80"/><br/><strong>Precedent Agent</strong><br/>Case Law Analysis</td>
-<td align="center"><img src="./frontend/public/agents/lekh.png" width="80"/><br/><strong>Limitation Agent</strong><br/>Time Limitations</td>
-<td align="center"><img src="./frontend/public/agents/Viro.png" width="80"/><br/><strong>Risk Agent</strong><br/>Legal Risk Assessment</td>
-</tr>
-<tr>
-<td align="center"><img src="./frontend/public/agents/Shuk.png" width="80"/><br/><strong>Devil's Advocate</strong><br/>Argument Challenges</td>
-<td align="center"><img src="./frontend/public/agents/Nyas.png" width="80"/><br/><strong>Ethics Agent</strong><br/>Professional Conduct</td>
-<td align="center"><img src="./frontend/public/agents/Yoj.png" width="80"/><br/><strong>Drafting Agent</strong><br/>Document Preparation</td>
-<td align="center"><strong>🗳️</strong><br/><strong>Aggregator</strong><br/>Democratic Voting</td>
-</tr>
-</table>
-</div>
-
 ### Voting Mechanism
 
 The system implements a sophisticated **Multiplicative Weight Updates (MWU)** algorithm:
@@ -227,7 +235,7 @@ Each agent follows a specialized workflow:
 4. **Confidence Assessment** – Self-evaluating response quality
 5. **Collaborative Voting** – Participating in democratic decision-making  
 
-## 🛡️ Security & Compliance
+## Security & Compliance
 
 ### Data Protection Architecture
 
@@ -283,7 +291,7 @@ class DataRetentionManager:
 - **Conflict Checking** – Automated conflict of interest detection
 - **Audit Trails** – Complete research history for professional accountability  
 
-## 📦 Technology Stack
+## Technology Stack
 
 ### **Frontend Architecture**
 ```typescript
@@ -351,7 +359,7 @@ class DataRetentionManager:
 - Security: HTTPS, JWT, Rate limiting
 ```  
 
-## 📝 How It Works
+## How It Works
 
 ### 1. **Document Ingestion Pipeline**
 ```
@@ -393,7 +401,7 @@ Retention Check → [Expired?] → Crypto-Shred → Compliance Report
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - **Node.js** 18+ and npm
@@ -493,7 +501,7 @@ npx hardhat deploy --network localhost
 
 ---
 
-## 🧪 Development Workflow
+## Development Workflow
 
 ### Running Tests
 ```bash
@@ -526,7 +534,7 @@ npm run lint
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions from the legal tech community! Here's how to get started:
 
@@ -545,32 +553,32 @@ We welcome contributions from the legal tech community! Here's how to get starte
 - **Legal Compliance**: Ensure changes maintain compliance
 
 ### Areas for Contribution
-- 🤖 **Agent Development** – New specialized legal agents
-- 🔍 **Search Enhancement** – Improved legal document retrieval
-- 🛡️ **Security Features** – Enhanced privacy and compliance
-- 🌐 **Internationalization** – Support for multiple Indian languages
-- 📊 **Analytics** – Better insights and reporting
-- 🧪 **Testing** – Expanded test coverage
+- **Agent Development** – New specialized legal agents
+- **Search Enhancement** – Improved legal document retrieval
+- **Security Features** – Enhanced privacy and compliance
+- **Internationalization** – Support for multiple Indian languages
+- **Analytics** – Better insights and reporting
+- **Testing** – Expanded test coverage
 
 ---
 
-## 📋 Roadmap
+## Roadmap
 
-### Phase 1: Core Platform ✅
+### Phase 1: Core Platform 
 - [x] Multi-agent legal AI system
 - [x] Avalanche subnet integration
 - [x] Basic security and compliance
 - [x] Document ingestion pipeline
 - [x] Web interface
 
-### Phase 2: Advanced Features 🚧
+### Phase 2: Advanced Features 
 - [ ] **Advanced NLP** – Support for Hindi and regional languages
 - [ ] **Mobile App** – React Native mobile application
 - [ ] **API Marketplace** – Third-party integrations
 - [ ] **Advanced Analytics** – Legal trend analysis
 - [ ] **Collaborative Features** – Team workspaces
 
-### Phase 3: Enterprise & Scale 📋
+### Phase 3: Enterprise & Scale 
 - [ ] **Enterprise SSO** – SAML/LDAP integration
 - [ ] **Advanced Compliance** – Additional regulatory frameworks
 - [ ] **AI Model Training** – Custom legal models
@@ -583,21 +591,19 @@ We welcome contributions from the legal tech community! Here's how to get starte
 
 ---
 
-## 🎯 Team & Credits
+## Team & Credits
 
 ### Core Team
-- **🎭 Legal AI Research** – Indian legal domain expertise
-- **⚡ Blockchain Engineering** – Avalanche subnet specialists  
-- **🛡️ Security & Compliance** – Privacy and data protection experts
-- **🎨 Product Design** – User experience and interface design
-- **📊 Data Science** – Machine learning and NLP specialists
+- **Legal AI Research** – Indian legal domain expertise
+- **Blockchain Engineering** – Avalanche subnet specialists  
+- **Security & Compliance** – Privacy and data protection experts
+- **Product Design** – User experience and interface design
+- **Data Science** – Machine learning and NLP specialists
 
 ### Acknowledgments
-- **📚 Indian Legal System** – Supreme Court & High Court judgments
-- **🤖 OpenAI** – GPT models and embeddings
-- **🏔️ Avalanche** – Blockchain infrastructure and support
-- **🏢 Jazzee Technologies** – Engineering and product development
-- **⚖️ Legal Community** – Feedback and domain expertise
+- **Indian Legal System** – Supreme Court & High Court judgments
+- **Avalanche** – Blockchain infrastructure and support
+- **⚖Legal Community** – Feedback and domain expertise
 
 
 ---
@@ -614,12 +620,3 @@ We welcome contributions from the legal tech community! Here's how to get starte
 
 ---
 
-<div align="center">
-<sub>
-© 2025 OPAL Legal Technologies. Made with ❤️ for the Indian legal community.<br/>
-<a href="https://opal.law/privacy">Privacy Policy</a> • 
-<a href="https://opal.law/terms">Terms of Service</a> • 
-<a href="https://opal.law/security">Security</a> • 
-<a href="mailto:support@opal.law">Contact</a>
-</sub>
-</div>
